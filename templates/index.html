@@ -43,6 +43,7 @@
                         <button onclick="switchTab('donors')" id="btn-donors" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-users ml-1"></i> المتبرعون</button>
                         <button onclick="switchTab('emergencies')" id="btn-emergencies" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-triangle-exclamation ml-1"></i> الحالات الحرجة</button>
                         <button onclick="switchTab('profile')" id="btn-profile" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-user-gear ml-1"></i> حسابي</button>
+                        <button onclick="switchTab('admin')" id="btn-admin" class="px-3.5 py-2 rounded-lg font-medium text-amber-400 hover:text-white transition hidden"><i class="fa-solid fa-shield-halved ml-1"></i> لوحة الإدارة</button>
                     </nav>
 
                     <button onclick="openLoginModal()" id="userAuthBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-3.5 py-2 rounded-xl font-bold text-slate-200 transition flex items-center gap-1.5 cursor-pointer">
@@ -249,6 +250,30 @@
                     </div>
                 </div>
             </section>
+
+            <!-- تبويب لوحة الإدارة -->
+            <section id="tab-admin" class="space-y-6 hidden">
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-gauge-high text-amber-400"></i> لوحة تحكم المشرفين والمدراء</h3>
+                            <p class="text-xs text-slate-400">إدارة الحالات الطارئة، المتبرعين، وتعديل صلاحيات المشرفين على المتجر.</p>
+                        </div>
+                        <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs px-3 py-1 rounded-full font-bold">صلاحية أدمن نشطة 🛡️</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-3">
+                            <h4 class="font-bold text-slate-200 text-sm flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> إدارة الحالات الطارئة</h4>
+                            <div id="adminEmergenciesList" class="space-y-3 max-h-96 overflow-y-auto text-xs"></div>
+                        </div>
+                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-3">
+                            <h4 class="font-bold text-slate-200 text-sm flex items-center gap-2"><i class="fa-solid fa-users text-blue-400"></i> إدارة المتبرعين وصلاحيات الإشراف</h4>
+                            <div id="adminDonorsList" class="space-y-3 max-h-96 overflow-y-auto text-xs"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -354,24 +379,24 @@
         </div>
     </div>
 
-    <!-- نافذة تسجيل الدخول (تم إصلاحها بالكامل لتعمل مباشرة) -->
+    <!-- نافذة تسجيل الدخول المخصصة بالرقم وكلمة المرور -->
     <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-lock text-red-500 ml-1"></i> تسجيل الدخول بالحساب</h3>
+                <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-lock text-red-500 ml-1"></i> تسجيل الدخول للإدارة</h3>
                 <button onclick="closeLoginModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block text-slate-400 mb-1">رقم الجوال</label>
-                    <input type="text" id="loginPhone" placeholder="05xxxxxxxx (أو أدخل أي جوال مسجل)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <input type="text" id="loginPhone" placeholder="0557137307" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <div>
                     <label class="block text-slate-400 mb-1">كلمة المرور</label>
-                    <input type="password" id="loginPassword" placeholder="أدخل أي كلمة مرور" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <input type="password" id="loginPassword" placeholder="Mkkmg1427" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <button type="button" onclick="submitPasswordLoginDirect()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-right-to-bracket text-xs"></i> دخول النظام
+                    <i class="fa-solid fa-right-to-bracket text-xs"></i> دخول لوحة الإدارة
                 </button>
             </div>
         </div>
@@ -387,7 +412,7 @@
     <script>
         let appData = {
             donors: JSON.parse(localStorage.getItem('wareed_donors')) || [
-                { id: '1', name: 'صالح العمري', blood_type: 'O-', phone: '0550000000', region: 'منطقة جازان', governorate: 'جازان', status: 'متاحة للتبرع', date: '2026-11-01 19:45' }
+                { id: '1', name: 'صالح العمري', blood_type: 'O-', phone: '0550000000', region: 'منطقة جازان', governorate: 'جازان', status: 'متاحة للتبرع', date: '2026-11-01 19:45', role: 'user' }
             ],
             emergencies: JSON.parse(localStorage.getItem('wareed_emergencies')) || [
                 { id: '1', patient_name: 'محمد عبدالله', blood_type: 'O+', phone: '0560000000', hospital: 'مستشفى الملك فهد', location: 'جازان', details: 'حاجة ماسة لوحدات دم عاجلة', date: '2026-11-01 19:45' }
@@ -408,7 +433,7 @@
         }
 
         function switchTab(tabId) {
-            ['home', 'donors', 'emergencies', 'profile'].forEach(t => {
+            ['home', 'donors', 'emergencies', 'profile', 'admin'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 const btn = document.getElementById(`btn-${t}`);
                 if (el) el.classList.add('hidden');
@@ -428,6 +453,14 @@
             document.getElementById('stat-emergencies').innerText = appData.emergencies.length;
             renderDonors();
             renderEmergencies();
+            renderAdminPanel();
+
+            const adminBtn = document.getElementById('btn-admin');
+            if (currentUser && (currentUser.role === 'admin' || currentUser.role === 'supervisor')) {
+                adminBtn.classList.remove('hidden');
+            } else {
+                adminBtn.classList.add('hidden');
+            }
 
             if (currentUser) {
                 document.getElementById('authBtnText').innerText = currentUser.name;
@@ -443,25 +476,48 @@
 
         function submitPasswordLoginDirect() {
             const phone = document.getElementById('loginPhone').value.trim();
-            if (!phone) {
-                showToast('الرجاء إدخال رقم الجوال', 'error');
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!phone || !password) {
+                showToast('الرجاء إدخال رقم الجوال وكلمة المرور', 'error');
                 return;
             }
 
-            // البحث عن المتبرع أو إنشاء مستخدم افتراضي برقم الجوال المدخل
-            let found = appData.donors.find(d => d.phone === phone);
-            if (!found) {
-                found = { id: Date.now().toString(), name: 'المتبرع (' + phone.slice(-4) + ')', blood_type: 'O+', phone: phone, region: 'منطقة جازان', governorate: 'جازان', status: 'متاحة للتبرع', date: '2026-11-01' };
-                appData.donors.unshift(found);
-                localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+            // التحقق من بيانات المدير المطلوبة بدقة
+            if (phone === '0557137307' && password === 'Mkkmg1427') {
+                currentUser = { 
+                    id: 'admin_master', 
+                    name: 'مدير الموقع الرئيسي 🛡️', 
+                    phone: '0557137307', 
+                    blood_type: 'O-', 
+                    region: 'منطقة جازان', 
+                    governorate: 'جازان', 
+                    role: 'admin', 
+                    status: 'نشط' 
+                };
+                showToast('تم تسجيل دخول المدير العام بنجاح!');
+            } else {
+                // التحقق من أي حساب آخر أو متبرع
+                let found = appData.donors.find(d => d.phone === phone);
+                if (found) {
+                    currentUser = found;
+                    if (!currentUser.role) currentUser.role = 'user';
+                } else {
+                    currentUser = { id: Date.now().toString(), name: 'متبرع (' + phone.slice(-4) + ')', blood_type: 'O+', phone: phone, region: 'منطقة جازان', governorate: 'جازان', role: 'user', status: 'متاحة للتبرع' };
+                    appData.donors.unshift(currentUser);
+                    localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+                }
+                showToast('تم تسجيل الدخول بنجاح!');
             }
 
-            currentUser = found;
             localStorage.setItem('wareed_current_user', JSON.stringify(currentUser));
-
             closeLoginModal();
             updateUI();
-            showToast('تم تسجيل الدخول بنجاح!');
+            
+            // تحويله تلقائياً للوحة الإدارة إذا كان أدمن
+            if (currentUser.role === 'admin') {
+                switchTab('admin');
+            }
         }
 
         function submitProfileUpdate() {
@@ -478,7 +534,6 @@
 
             localStorage.setItem('wareed_current_user', JSON.stringify(currentUser));
             
-            // تحديثه في قائمة المتبرعين أيضاً
             let idx = appData.donors.findIndex(d => d.id === currentUser.id);
             if (idx !== -1) {
                 appData.donors[idx] = currentUser;
@@ -504,7 +559,7 @@
             }
 
             const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
-            const newDonor = { id: Date.now().toString(), name, blood_type, phone, region, governorate, status: 'متاحة للتبرع', date: now };
+            const newDonor = { id: Date.now().toString(), name, blood_type, phone, region, governorate, status: 'متاحة للتبرع', date: now, role: 'user' };
             appData.donors.unshift(newDonor);
             localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
 
@@ -527,7 +582,7 @@
             }
 
             const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
-            const newDonor = { id: Date.now().toString(), name, blood_type, phone, region, governorate, status: 'متاحة للتبرع', date: now };
+            const newDonor = { id: Date.now().toString(), name, blood_type, phone, region, governorate, status: 'متاحة للتبرع', date: now, role: 'user' };
             appData.donors.unshift(newDonor);
             localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
 
@@ -623,6 +678,63 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function renderAdminPanel() {
+            const emList = document.getElementById('adminEmergenciesList');
+            const donList = document.getElementById('adminDonorsList');
+            if (!emList || !donList) return;
+
+            emList.innerHTML = appData.emergencies.map(em => `
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <div>
+                        <strong class="text-white">${em.patient_name}</strong> (<span class="text-red-400">${em.blood_type}</span>)
+                        <div class="text-[10px] text-slate-400">${em.hospital}</div>
+                    </div>
+                    <button onclick="deleteEmergency('${em.id}')" class="bg-red-600/30 hover:bg-red-600 text-red-300 hover:text-white px-2.5 py-1 rounded text-[10px] cursor-pointer">حذف</button>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-center">لا توجد حالات طارئة</p>';
+
+            donList.innerHTML = appData.donors.map(d => `
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <div>
+                        <strong class="text-white">${d.name}</strong> (<span class="text-red-400">${d.blood_type}</span>)
+                        <div class="text-[10px] text-slate-400">رتبة: ${d.role || 'user'}</div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <select onchange="changeRole('${d.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[10px] text-amber-300 outline-none">
+                            <option value="user" ${d.role==='user'?'selected':''}>متبرع</option>
+                            <option value="supervisor" ${d.role==='supervisor'?'selected':''}>مشرف</option>
+                            <option value="admin" ${d.role==='admin'?'selected':''}>مدير</option>
+                        </select>
+                        <button onclick="deleteDonor('${d.id}')" class="bg-red-600/30 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-[10px] cursor-pointer">حذف</button>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-center">لا يوجد متبرعون</p>';
+        }
+
+        function deleteEmergency(id) {
+            appData.emergencies = appData.emergencies.filter(e => e.id !== id);
+            localStorage.setItem('wareed_emergencies', JSON.stringify(appData.emergencies));
+            showToast('تم حذف الحالة الطارئة بنجاح');
+            updateUI();
+        }
+
+        function deleteDonor(id) {
+            appData.donors = appData.donors.filter(d => d.id !== id);
+            localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+            showToast('تم حذف المتبرع بنجاح');
+            updateUI();
+        }
+
+        function changeRole(id, role) {
+            let d = appData.donors.find(item => item.id === id);
+            if (d) {
+                d.role = role;
+                localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+                showToast('تم تحديث صلاحية المشرف بنجاح');
+                updateUI();
+            }
         }
 
         function showDonorDetails(id) {
