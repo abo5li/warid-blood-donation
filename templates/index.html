@@ -167,17 +167,17 @@
                 </div>
             </section>
 
-            <!-- تبويب المتبرعين الكامل مع نموذج تعبئة البيانات -->
+            <!-- تبويب المتبرعين الكامل مع نموذج تعبئة البيانات (تم إصلاح زر الحفظ والحقول) -->
             <section id="tab-donors" class="space-y-6 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
                         <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
                             <i class="fa-solid fa-user-plus text-blue-400"></i> تعبئة بيانات متبرع جديد
                         </h3>
-                        <form id="directoryDonorForm" onsubmit="submitDirectoryDonor(event)" class="space-y-3 text-xs">
+                        <div class="space-y-3 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1">اسم المتبرع الكامل</label>
-                                <input type="text" id="dirName" required placeholder="مثال: صالح العمري" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
+                                <input type="text" id="dirName" placeholder="مثال: صالح العمري" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
@@ -188,7 +188,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-slate-400 mb-1">رقم الجوال</label>
-                                    <input type="text" id="dirPhone" required placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
+                                    <input type="text" id="dirPhone" placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
@@ -200,13 +200,15 @@
                                 </div>
                                 <div>
                                     <label class="block text-slate-400 mb-1">المحافظة</label>
-                                    <input type="text" id="dirGov" required placeholder="المحافظة" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
+                                    <select id="dirGov" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none font-bold">
+                                        <option>جازان</option><option>أبو عريش</option><option>صامطة</option><option>صبيا</option><option>الرياض</option><option>جدة</option><option>الدمام</option>
+                                    </select>
                                 </div>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition cursor-pointer">
-                                <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ وتسجيل المتبرع
+                            <button type="button" onclick="submitDirectoryDonorDirect()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition cursor-pointer flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> حفظ وتسجيل المتبرع
                             </button>
-                        </form>
+                        </div>
                     </div>
 
                     <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
@@ -249,10 +251,10 @@
                             </div>
                         </div>
 
-                        <form id="donorForm" onsubmit="submitDonorForm(event)" class="space-y-4 text-xs">
+                        <div class="space-y-4 text-xs">
                             <div>
                                 <label class="block text-slate-400 mb-1">الاسم الكامل</label>
-                                <input type="text" id="dName" required placeholder="مثال: خالد العتيبي" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                                <input type="text" id="dName" placeholder="مثال: خالد العتيبي" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
@@ -264,7 +266,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-slate-400 mb-1">رقم الجوال</label>
-                                    <input type="text" id="dPhone" required placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                                    <input type="text" id="dPhone" placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
@@ -276,15 +278,17 @@
                                 </div>
                                 <div>
                                     <label class="block text-slate-400 mb-1">المحافظة</label>
-                                    <input type="text" id="dGov" required placeholder="مثال: جازان" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                                    <select id="dGov" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none font-bold">
+                                        <option>جازان</option><option>أبو عريش</option><option>صامطة</option><option>صبيا</option><option>الرياض</option><option>جدة</option><option>الدمام</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3 bg-slate-950 p-4 rounded-xl border border-slate-800">
-                                <input type="checkbox" id="dConfirm" required class="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded">
+                                <input type="checkbox" id="dConfirm" class="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded">
                                 <label for="dConfirm" class="text-slate-300 cursor-pointer">أؤكد صحة بياناتي وأعلن جاهزيتي التامة لاستقبال استغاثات التبرع.</label>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition cursor-pointer">تحديث وحفظ الملف الشخصي</button>
-                        </form>
+                            <button type="button" onclick="submitDonorFormDirect()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition cursor-pointer">تحديث وحفظ الملف الشخصي</button>
+                        </div>
                     </div>
 
                     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col justify-between">
@@ -330,10 +334,10 @@
                 <h3 class="font-bold text-blue-400 text-base flex items-center gap-2"><i class="fa-solid fa-user-plus"></i> تسجيل متبرع جديد</h3>
                 <button onclick="closeQuickDonorModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form id="quickDonorForm" onsubmit="submitQuickDonor(event)" class="space-y-3 text-xs">
+            <div class="space-y-3 text-xs">
                 <div>
                     <label class="block text-slate-400 mb-1">اسم المتبرع</label>
-                    <input type="text" id="qName" required placeholder="أدخل اسم المتبرع الكامل" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <input type="text" id="qName" placeholder="أدخل اسم المتبرع الكامل" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -344,7 +348,7 @@
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">رقم التواصل</label>
-                        <input type="text" id="qPhone" required placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                        <input type="text" id="qPhone" placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
@@ -356,15 +360,17 @@
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">المحافظة</label>
-                        <input type="text" id="qGov" required placeholder="المحافظة" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                        <select id="qGov" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none font-bold">
+                            <option>جازان</option><option>أبو عريش</option><option>صامطة</option><option>صبيا</option><option>الرياض</option><option>جدة</option><option>الدمام</option>
+                        </select>
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition mt-2 cursor-pointer">حفظ وتسجيل المتبرع</button>
-            </form>
+                <button type="button" onclick="submitQuickDonorDirect()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition mt-2 cursor-pointer">حفظ وتسجيل المتبرع</button>
+            </div>
         </div>
     </div>
 
-    <!-- نافذة إضافة حالة طارئة حرجة (تم اصلاح الزر والإرسال بالكامل) -->
+    <!-- نافذة إضافة حالة طارئة حرجة -->
     <div id="emergencyModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-red-600 rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-5 shadow-2xl relative">
             <div class="flex justify-between items-center border-b border-red-900/60 pb-3">
@@ -440,16 +446,16 @@
 
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
                 <h4 class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-paper-plane"></i> تواصل مع فريق الدعم الفني</h4>
-                <form onsubmit="submitSupportMessage(event)" class="space-y-2.5">
+                <div class="space-y-2.5">
                     <div class="grid grid-cols-2 gap-2">
-                        <input type="text" id="supName" required placeholder="اسمك الكريم" class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full">
-                        <input type="text" id="supPhone" required placeholder="رقم جوالك (05xxxxxxxx)" class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full">
+                        <input type="text" id="supName" placeholder="اسمك الكريم" class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full">
+                        <input type="text" id="supPhone" placeholder="رقم جوالك (05xxxxxxxx)" class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full">
                     </div>
-                    <textarea id="supMessage" required rows="2" placeholder="اكتب استفسارك أو مشكلتك..." class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full resize-none"></textarea>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+                    <textarea id="supMessage" rows="2" placeholder="اكتب استفسارك أو مشكلتك..." class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full resize-none"></textarea>
+                    <button type="button" onclick="submitSupportMessageDirect()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة للدعم الفني
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -461,7 +467,7 @@
                 <h3 class="font-bold text-white text-sm"><i class="fa-solid fa-lock text-red-500 ml-1"></i> تسجيل الدخول بالحساب</h3>
                 <button onclick="closeLoginModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form onsubmit="submitPasswordLogin(event)" class="space-y-3 text-xs">
+            <div class="space-y-3 text-xs">
                 <div>
                     <label class="block text-slate-400 mb-1">رقم الجوال</label>
                     <input type="text" id="loginPhone" placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
@@ -470,10 +476,10 @@
                     <label class="block text-slate-400 mb-1">كلمة المرور</label>
                     <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+                <button type="button" onclick="submitPasswordLoginDirect()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-right-to-bracket text-xs"></i> دخول النظام
                 </button>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -514,7 +520,7 @@
                 document.getElementById('authBtnText').innerText = currentUser.name;
                 document.getElementById('dName').value = currentUser.name || '';
                 document.getElementById('dPhone').value = currentUser.phone || '';
-                document.getElementById('dGov').value = currentUser.governorate || '';
+                if(document.getElementById('dGov')) document.getElementById('dGov').value = currentUser.governorate || 'جازان';
                 if(currentUser.blood_type) document.getElementById('dBlood').value = currentUser.blood_type;
                 if(currentUser.region) document.getElementById('dRegion').value = currentUser.region;
             } else {
@@ -532,11 +538,15 @@
             document.getElementById('supportModal').classList.toggle('hidden');
         }
 
-        async function submitSupportMessage(e) {
-            e.preventDefault();
-            const name = document.getElementById('supName').value;
-            const phone = document.getElementById('supPhone').value;
-            const message = document.getElementById('supMessage').value;
+        async function submitSupportMessageDirect() {
+            const name = document.getElementById('supName').value.trim();
+            const phone = document.getElementById('supPhone').value.trim();
+            const message = document.getElementById('supMessage').value.trim();
+
+            if (!name || !phone || !message) {
+                showToast('الرجاء تعبئة جميع حقول الدعم الفني', 'error');
+                return;
+            }
 
             const res = await fetch('/api/support/send', {
                 method: 'POST',
@@ -607,7 +617,7 @@
             const details = document.getElementById('eDetails').value.trim();
 
             if (!patient_name || !phone || !hospital || !location) {
-                showToast('الرجاء تعبئة جميع الحقول المطلوبة', 'error');
+                showToast('الرجاء تعبئة جميع الحقول المطلوبة للاستغاثة', 'error');
                 return;
             }
 
@@ -631,23 +641,78 @@
             }
         }
 
-        async function submitDirectoryDonor(e) {
-            e.preventDefault();
+        async function submitDirectoryDonorDirect() {
+            const name = document.getElementById('dirName').value.trim();
+            const blood_type = document.getElementById('dirBlood').value;
+            const phone = document.getElementById('dirPhone').value.trim();
+            const region = document.getElementById('dirRegion').value;
+            const governorate = document.getElementById('dirGov').value;
+
+            if (!name || !phone) {
+                showToast('الرجاء إدخال اسم المتبرع ورقم الجوال', 'error');
+                return;
+            }
+
             const res = await fetch('/api/register-donor', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    name: document.getElementById('dirName').value,
-                    blood_type: document.getElementById('dirBlood').value,
-                    phone: document.getElementById('dirPhone').value,
-                    region: document.getElementById('dirRegion').value,
-                    governorate: document.getElementById('dirGov').value
-                })
+                body: JSON.stringify({ name, blood_type, phone, region, governorate })
             });
             const data = await res.json();
-            showToast('تم تسجيل وتعبئة بيانات المتبرع بنجاح!');
-            document.getElementById('directoryDonorForm').reset();
+            showToast('تم حفظ وتسجيل المتبرع وعرضه في القائمة بنجاح!');
+            document.getElementById('dirName').value = '';
+            document.getElementById('dirPhone').value = '';
             fetchData();
+        }
+
+        async function submitQuickDonorDirect() {
+            const name = document.getElementById('qName').value.trim();
+            const blood_type = document.getElementById('qBlood').value;
+            const phone = document.getElementById('qPhone').value.trim();
+            const region = document.getElementById('qRegion').value;
+            const governorate = document.getElementById('qGov').value;
+
+            if (!name || !phone) {
+                showToast('الرجاء إدخال اسم المتبرع ورقم الجوال', 'error');
+                return;
+            }
+
+            const res = await fetch('/api/register-donor', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name, blood_type, phone, region, governorate })
+            });
+            const data = await res.json();
+            showToast('تم تسجيل المتبرع الجديد بنجاح!');
+            closeQuickDonorModal();
+            document.getElementById('qName').value = '';
+            document.getElementById('qPhone').value = '';
+            fetchData();
+        }
+
+        async function submitDonorFormDirect() {
+            const name = document.getElementById('dName').value.trim();
+            const blood_type = document.getElementById('dBlood').value;
+            const phone = document.getElementById('dPhone').value.trim();
+            const region = document.getElementById('dRegion').value;
+            const governorate = document.getElementById('dGov').value;
+
+            if (!name || !phone) {
+                showToast('الرجاء إدخال الاسم ورقم الجوال', 'error');
+                return;
+            }
+
+            const res = await fetch('/api/register-donor', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name, blood_type, phone, region, governorate })
+            });
+            const data = await res.json();
+            currentUser = data.donor;
+            document.getElementById('authBtnText').innerText = currentUser.name;
+            showToast('تم تحديث وحفظ الملف الشخصي بنجاح!');
+            fetchData();
+            switchTab('donors');
         }
 
         function renderEmergencyCases() {
@@ -898,11 +963,15 @@
         function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
 
-        async function submitPasswordLogin(e) {
-            e.preventDefault();
-            const phone = document.getElementById('loginPhone').value;
-            const password = document.getElementById('loginPassword').value;
+        async function submitPasswordLoginDirect() {
+            const phone = document.getElementById('loginPhone').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
             
+            if(!phone || !password) {
+                showToast('الرجاء إدخال رقم الجوال وكلمة المرور', 'error');
+                return;
+            }
+
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -923,47 +992,6 @@
 
         function openQuickDonorModal() { document.getElementById('quickDonorModal').classList.remove('hidden'); }
         function closeQuickDonorModal() { document.getElementById('quickDonorModal').classList.add('hidden'); }
-
-        async function submitQuickDonor(e) {
-            e.preventDefault();
-            const res = await fetch('/api/register-donor', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    name: document.getElementById('qName').value,
-                    blood_type: document.getElementById('qBlood').value,
-                    phone: document.getElementById('qPhone').value,
-                    region: document.getElementById('qRegion').value,
-                    governorate: document.getElementById('qGov').value
-                })
-            });
-            const data = await res.json();
-            showToast('تم تسجيل المتبرع الجديد بنجاح!');
-            closeQuickDonorModal();
-            document.getElementById('quickDonorForm').reset();
-            fetchData();
-        }
-
-        async function submitDonorForm(e) {
-            e.preventDefault();
-            const res = await fetch('/api/register-donor', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    name: document.getElementById('dName').value,
-                    blood_type: document.getElementById('dBlood').value,
-                    phone: document.getElementById('dPhone').value,
-                    region: document.getElementById('dRegion').value,
-                    governorate: document.getElementById('dGov').value
-                })
-            });
-            const data = await res.json();
-            currentUser = data.donor;
-            document.getElementById('authBtnText').innerText = currentUser.name;
-            showToast(data.message);
-            fetchData();
-            switchTab('donors');
-        }
     </script>
 </body>
 </html>
