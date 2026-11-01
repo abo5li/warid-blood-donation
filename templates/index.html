@@ -58,7 +58,7 @@
 
             <!-- تبويب الرئيسية -->
             <section id="tab-home" class="space-y-8">
-
+                
                 <!-- 1. شريط الآية الكريمة المباركة -->
                 <div class="bg-gradient-to-r from-red-950 via-slate-900 to-red-950 border border-red-900/50 rounded-2xl p-5 text-center shadow-xl">
                     <p class="text-lg md:text-xl font-bold text-red-300 tracking-wide">
@@ -68,10 +68,11 @@
 
                 <!-- 2. قسم البانر الرئيسي الكبير مع الصورة المباشرة المحدثة -->
                 <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-red-950/30 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col md:flex-row items-center gap-8">
-
+                    
                     <!-- عرض الصورة بشكل كبير ومرتب ومباشر -->
                     <div class="w-full md:w-2/5 flex items-center justify-center p-2 bg-slate-950 rounded-2xl border-2 border-red-600/30 shadow-2xl overflow-hidden relative group">
-                      <img src="https://images.pexels.com/photos/6823567/pexels-photo-6823567.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="شخص يتبرع بالدم" class="w-full h-64 rounded-xl object-cover transition transform group-hover:scale-105 duration-500">
+                        <img src="https://images.pexels.com/photos/6823567/pexels-photo-6823567.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="شخص يتبرع بالدم" class="w-full h-64 rounded-xl object-cover transition transform group-hover:scale-105 duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-red-950/90 via-transparent to-transparent opacity-80 rounded-xl"></div>
                         <span class="absolute bottom-3 right-4 text-white font-extrabold text-xs z-10 bg-red-600/80 px-3 py-1 rounded-full shadow">القدوة والعطاء 🩸</span>
                     </div>
 
@@ -80,7 +81,7 @@
                         <span class="bg-red-500/20 text-red-400 border border-red-500/30 text-xs px-3 py-1 rounded-full font-bold">بنوك الدم وبصمة الإنسانية</span>
                         <h2 class="text-2xl md:text-3xl font-extrabold text-white">تبرعك اليوم يصنع معجزة حياة غدًا</h2>
                         <p class="text-xs md:text-sm text-slate-300 leading-relaxed max-w-xl">المتبرع بالدم يمنح أملًا جديدًا للمصابين والمرضى في كافة مستشفيات المملكة. اتبع خطى القدوة وانضم لنخبة المنقذين الآن عبر شبكة وريد.</p>
-
+                        
                         <div class="flex flex-col sm:flex-row gap-3 pt-3 justify-center md:justify-start">
                             <button onclick="switchTab('cases'); openRequestModal();" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-3 rounded-xl shadow-lg transition text-center flex items-center justify-center gap-2 text-xs">
                                 <i class="fa-solid fa-truck-medical"></i> أحتاج متبرعاً (نداء طارئ)
@@ -291,7 +292,7 @@
             <!-- الأسئلة الشائعة -->
             <div class="space-y-3 text-xs">
                 <h4 class="font-bold text-red-400 text-sm flex items-center gap-1.5"><i class="fa-solid fa-circle-question"></i> الأسئلة الشائعة (اضغط لعرض الإجابة)</h4>
-
+                
                 <div class="space-y-2">
                     <div class="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
                         <button onclick="toggleFaq(1)" class="w-full text-right p-3 font-bold text-white flex justify-between items-center hover:bg-slate-900 transition">
@@ -318,14 +319,14 @@
             <!-- نموذج التواصل مع الدعم الفني -->
             <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs">
                 <h4 class="font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-paper-plane"></i> تواصل مع فريق الدعم الفني</h4>
-
+                
                 <form onsubmit="submitSupportMessage(event)" class="space-y-2.5">
                     <div class="grid grid-cols-2 gap-2">
                         <input type="text" id="supName" required placeholder="اسمك الكريم" class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full">
                         <input type="text" id="supPhone" required placeholder="رقم جوالك (05xxxxxxxx)" class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full">
                     </div>
                     <textarea id="supMessage" required rows="2" placeholder="اكتب استفسارك أو مشكلتك..." class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 outline-none text-slate-100 w-full resize-none"></textarea>
-
+                    
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة للدعم الفني
                     </button>
@@ -676,7 +677,7 @@
                         </div>
                         <span class="text-[10px] bg-slate-950 px-2 py-0.5 rounded text-amber-400 font-bold border border-slate-800">${appData.roles[d.role] || d.role}</span>
                     </div>
-
+                    
                     <div class="flex items-center gap-1.5 pt-1 border-t border-slate-800/80">
                         <select onchange="adminChangeRole('${d.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[10px] text-amber-300 outline-none">
                             <option value="admin" ${d.role==='admin'?'selected':''}>مدير النظام 🛡️</option>
@@ -763,14 +764,14 @@
             e.preventDefault();
             const phone = document.getElementById('loginPhone').value;
             const password = document.getElementById('loginPassword').value;
-
+            
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ phone, password })
             });
             const data = await res.json();
-
+            
             if(data.status === 'success') {
                 currentUser = data.donor;
                 document.getElementById('authBtnText').innerText = currentUser.name;
