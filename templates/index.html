@@ -379,7 +379,7 @@
         </div>
     </div>
 
-    <!-- نافذة تسجيل الدخول (بحقول فارغة وآمنة تماماً) -->
+    <!-- نافذة تسجيل الدخول المخصصة بالرقم وكلمة المرور -->
     <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -389,11 +389,11 @@
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block text-slate-400 mb-1">رقم الجوال</label>
-                    <input type="text" id="loginPhone" placeholder="أدخل رقم الجوال" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <input type="text" id="loginPhone" placeholder="0557137307" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <div>
                     <label class="block text-slate-400 mb-1">كلمة المرور</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <input type="password" id="loginPassword" placeholder="Mkkmg1427" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <button type="button" onclick="submitPasswordLoginDirect()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-right-to-bracket text-xs"></i> دخول لوحة الإدارة
@@ -426,9 +426,25 @@
             const toast = document.createElement('div');
             let bgColors = type === 'success' ? 'bg-emerald-900/90 border-emerald-500 text-emerald-200' : 'bg-red-900/90 border-red-500 text-red-200';
             toast.className = `pointer-events-auto flex items-center gap-3 p-4 rounded-2xl border shadow-2xl backdrop-blur-md toast-enter ${bgColors}`;
-            toast.innerHTML = `<div class="text-xs font-bold flex-1">${message}</div>`; container.appendChild(toast); setTimeout(() => { toast.classList.add('toast-active'); }, 10); setTimeout(() => { toast.remove(); }, 3000); }  function switchTab(tabId) { ['home', 'donors', 'emergencies', 'profile', 'admin'].forEach(t => { const el = document.getElementById(`tab-${t}`);
-                const btn = document.getElementById(`btn-${t}`); if (el) el.classList.add('hidden'); if (btn) { btn.classList.remove('bg-red-600', 'text-white', 'shadow'); btn.classList.add('text-slate-300'); } }); document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            document.getElementById(`btn-${tabId}`).classList.add('bg-red-600', 'text-white', 'shadow'); document.getElementById(`btn-${tabId}`).classList.remove('text-slate-300');
+            toast.innerHTML = `<div class="text-xs font-bold flex-1">${message}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('toast-active'); }, 10);
+            setTimeout(() => { toast.remove(); }, 3000);
+        }
+
+        function switchTab(tabId) {
+            ['home', 'donors', 'emergencies', 'profile', 'admin'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`btn-${t}`);
+                if (el) el.classList.add('hidden');
+                if (btn) {
+                    btn.classList.remove('bg-red-600', 'text-white', 'shadow');
+                    btn.classList.add('text-slate-300');
+                }
+            });
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`btn-${tabId}`).classList.add('bg-red-600', 'text-white', 'shadow');
+            document.getElementById(`btn-${tabId}`).classList.remove('text-slate-300');
             updateUI();
         }
 
@@ -467,7 +483,7 @@
                 return;
             }
 
-            // التحقق من بيانات المدير المحددة
+            // التحقق من بيانات المدير المطلوبة بدقة
             if (phone === '0557137307' && password === 'Mkkmg1427') {
                 currentUser = { 
                     id: 'admin_master', 
@@ -481,6 +497,7 @@
                 };
                 showToast('تم تسجيل دخول المدير العام بنجاح!');
             } else {
+                // التحقق من أي حساب آخر أو متبرع
                 let found = appData.donors.find(d => d.phone === phone);
                 if (found) {
                     currentUser = found;
@@ -497,6 +514,7 @@
             closeLoginModal();
             updateUI();
             
+            // تحويله تلقائياً للوحة الإدارة إذا كان أدمن
             if (currentUser.role === 'admin') {
                 switchTab('admin');
             }
@@ -616,7 +634,7 @@
                     <div class="absolute top-3 left-3 bg-slate-950 px-2.5 py-0.5 rounded-lg text-red-400 font-extrabold text-xs">${d.blood_type}</div>
                     <div class="space-y-1.5 pt-5">
                         <h4 class="font-bold text-slate-100 text-xs"><i class="fa-solid fa-user-check text-emerald-400 ml-1"></i> ${d.name}</h4>
-                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} -${d.governorate}</p>
+                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
                     </div>
                     <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
                         <button onclick="showDonorDetails('${d.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-bold cursor-pointer">
@@ -633,7 +651,7 @@
                     <div class="absolute top-3 left-3 bg-slate-950 px-2.5 py-0.5 rounded-lg text-red-400 font-extrabold text-xs">${d.blood_type}</div>
                     <div class="space-y-1.5 pt-5">
                         <h4 class="font-bold text-slate-100 text-xs"><i class="fa-solid fa-user-check text-emerald-400 ml-1"></i> ${d.name}</h4>
-                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} -${d.governorate}</p>
+                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
                     </div>
                     <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
                         <button onclick="showDonorDetails('${d.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-bold cursor-pointer"><i class="fa-solid fa-eye ml-1"></i> تفاصيل</button>
@@ -651,7 +669,7 @@
                     <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-xl font-extrabold text-xs">${em.blood_type} 🩸</div>
                     <div class="space-y-2 pt-6">
                         <h4 class="font-black text-white text-sm">${em.patient_name}</h4>
-                        <p class="text-xs text-slate-300"><i class="fa-solid fa-hospital ml-1 text-red-400"></i> ${em.hospital} -${em.location}</p>
+                        <p class="text-xs text-slate-300"><i class="fa-solid fa-hospital ml-1 text-red-400"></i> ${em.hospital} - ${em.location}</p>
                         <p class="text-xs text-red-200 bg-red-950/60 p-2.5 rounded-xl border border-red-900/50">${em.details}</p>
                     </div>
                     <div class="pt-2 border-t border-red-900/50 flex justify-between items-center text-xs">
@@ -678,4 +696,71 @@
             `).join('') || '<p class="text-slate-500 text-center">لا توجد حالات طارئة</p>';
 
             donList.innerHTML = appData.donors.map(d => `
-                <div class="bg-slate-900 p-3 rounded-xl border border
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <div>
+                        <strong class="text-white">${d.name}</strong> (<span class="text-red-400">${d.blood_type}</span>)
+                        <div class="text-[10px] text-slate-400">رتبة: ${d.role || 'user'}</div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <select onchange="changeRole('${d.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[10px] text-amber-300 outline-none">
+                            <option value="user" ${d.role==='user'?'selected':''}>متبرع</option>
+                            <option value="supervisor" ${d.role==='supervisor'?'selected':''}>مشرف</option>
+                            <option value="admin" ${d.role==='admin'?'selected':''}>مدير</option>
+                        </select>
+                        <button onclick="deleteDonor('${d.id}')" class="bg-red-600/30 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-[10px] cursor-pointer">حذف</button>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-center">لا يوجد متبرعون</p>';
+        }
+
+        function deleteEmergency(id) {
+            appData.emergencies = appData.emergencies.filter(e => e.id !== id);
+            localStorage.setItem('wareed_emergencies', JSON.stringify(appData.emergencies));
+            showToast('تم حذف الحالة الطارئة بنجاح');
+            updateUI();
+        }
+
+        function deleteDonor(id) {
+            appData.donors = appData.donors.filter(d => d.id !== id);
+            localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+            showToast('تم حذف المتبرع بنجاح');
+            updateUI();
+        }
+
+        function changeRole(id, role) {
+            let d = appData.donors.find(item => item.id === id);
+            if (d) {
+                d.role = role;
+                localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+                showToast('تم تحديث صلاحية المشرف بنجاح');
+                updateUI();
+            }
+        }
+
+        function showDonorDetails(id) {
+            const donor = appData.donors.find(d => d.id === id);
+            if (!donor) return;
+            document.getElementById('donorDetailsContent').innerHTML = `
+                <div><strong>اسم المتبرع:</strong> <span class="text-white font-bold">${donor.name}</span></div>
+                <div><strong>فصيلة الدم المطلوبة:</strong> <span class="text-red-400 font-bold">${donor.blood_type}</span></div>
+                <div><strong>المنطقة / المحافظة:</strong> ${donor.region} - ${donor.governorate}</div>
+                <div><strong>حالة الجاهزية:</strong> <span class="text-emerald-400">${donor.status}</span></div>
+                <div><strong>رقم التواصل:</strong> <a href="tel:${donor.phone}" class="text-blue-400 underline font-mono font-bold">${donor.phone}</a></div>
+                <div><strong>تاريخ التسجيل:</strong> ${donor.date || 'غير متوفر'}</div>
+            `;
+            document.getElementById('donorDetailsModal').classList.remove('hidden');
+        }
+
+        function closeDonorDetailsModal() { document.getElementById('donorDetailsModal').classList.add('hidden'); }
+        function openEmergencyModal() { document.getElementById('emergencyModal').classList.remove('hidden'); }
+        function closeEmergencyModal() { document.getElementById('emergencyModal').classList.add('hidden'); }
+        function openQuickDonorModal() { document.getElementById('quickDonorModal').classList.remove('hidden'); }
+        function closeQuickDonorModal() { document.getElementById('quickDonorModal').classList.add('hidden'); }
+        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+        function toggleSupportModal() {}
+
+        window.onload = updateUI;
+    </script>
+</body>
+</html>
