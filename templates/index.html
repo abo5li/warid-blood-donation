@@ -364,17 +364,17 @@
         </div>
     </div>
 
-    <!-- نافذة إضافة حالة طارئة حرجة باللون الأحمر البارز -->
+    <!-- نافذة إضافة حالة طارئة حرجة (تم اصلاح الزر والإرسال بالكامل) -->
     <div id="emergencyModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-red-600 rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-5 shadow-2xl relative">
             <div class="flex justify-between items-center border-b border-red-900/60 pb-3">
                 <h3 class="font-bold text-red-400 text-base flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation animate-bounce"></i> إطلاق استغاثة حالة طارئة حرجة</h3>
                 <button onclick="closeEmergencyModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form id="emergencyForm" onsubmit="submitEmergencyCase(event)" class="space-y-3 text-xs">
+            <div class="space-y-3 text-xs">
                 <div>
                     <label class="block text-slate-300 mb-1 font-bold">اسم المريض أو المصاب</label>
-                    <input type="text" id="ePatientName" required placeholder="مثال: محمد عبدالله" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                    <input type="text" id="ePatientName" placeholder="مثال: محمد عبدالله" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -385,27 +385,27 @@
                     </div>
                     <div>
                         <label class="block text-slate-300 mb-1 font-bold">رقم التواصل العاجل</label>
-                        <input type="text" id="ePhone" required placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                        <input type="text" id="ePhone" placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-slate-300 mb-1 font-bold">المستشفى أو المركز الطبي</label>
-                        <input type="text" id="eHospital" required placeholder="مثال: مستشفى الملك فهد" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                        <input type="text" id="eHospital" placeholder="مثال: مستشفى الملك فهد" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
                     </div>
                     <div>
                         <label class="block text-slate-300 mb-1 font-bold">المنطقة / المحافظة</label>
-                        <input type="text" id="eLocation" required placeholder="مثال: جازان" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                        <input type="text" id="eLocation" placeholder="مثال: جازان" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
                     </div>
                 </div>
                 <div>
                     <label class="block text-slate-300 mb-1 font-bold">تفاصيل وحالة الطوارئ الإضافية</label>
-                    <textarea id="eDetails" required rows="2" placeholder="اكتب تفاصيل الحالة أو الوحدات المطلوبة..." class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500 resize-none"></textarea>
+                    <textarea id="eDetails" rows="2" placeholder="اكتب تفاصيل الحالة أو الوحدات المطلوبة..." class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500 resize-none"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-red-900/50 transition mt-2 cursor-pointer flex items-center justify-center gap-2">
+                <button type="button" onclick="submitEmergencyCaseDirect()" class="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-red-900/50 transition mt-2 cursor-pointer flex items-center justify-center gap-2">
                     <i class="fa-solid fa-bullhorn"></i> نشر الاستغاثة الحرجة فوراً
                 </button>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -598,25 +598,33 @@
         function openEmergencyModal() { document.getElementById('emergencyModal').classList.remove('hidden'); }
         function closeEmergencyModal() { document.getElementById('emergencyModal').classList.add('hidden'); }
 
-        async function submitEmergencyCase(e) {
-            e.preventDefault();
+        async function submitEmergencyCaseDirect() {
+            const patient_name = document.getElementById('ePatientName').value.trim();
+            const blood_type = document.getElementById('eBlood').value;
+            const phone = document.getElementById('ePhone').value.trim();
+            const hospital = document.getElementById('eHospital').value.trim();
+            const location = document.getElementById('eLocation').value.trim();
+            const details = document.getElementById('eDetails').value.trim();
+
+            if (!patient_name || !phone || !hospital || !location) {
+                showToast('الرجاء تعبئة جميع الحقول المطلوبة', 'error');
+                return;
+            }
+
             const res = await fetch('/api/emergency/add', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    patient_name: document.getElementById('ePatientName').value,
-                    blood_type: document.getElementById('eBlood').value,
-                    phone: document.getElementById('ePhone').value,
-                    hospital: document.getElementById('eHospital').value,
-                    location: document.getElementById('eLocation').value,
-                    details: document.getElementById('eDetails').value
-                })
+                body: JSON.stringify({ patient_name, blood_type, phone, hospital, location, details })
             });
             const data = await res.json();
             if(data.status === 'success') {
                 showToast('تم نشر الاستغاثة الحرجة بنجاح!');
                 closeEmergencyModal();
-                document.getElementById('emergencyForm').reset();
+                document.getElementById('ePatientName').value = '';
+                document.getElementById('ePhone').value = '';
+                document.getElementById('eHospital').value = '';
+                document.getElementById('eLocation').value = '';
+                document.getElementById('eDetails').value = '';
                 fetchData();
             } else {
                 showToast(data.message, 'error');
