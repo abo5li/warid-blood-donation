@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة وريد الذكية | نظام إدارة التبرع بالدم</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media print {
@@ -44,10 +43,9 @@
                         <button onclick="switchTab('donors')" id="btn-donors" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-users ml-1"></i> المتبرعون</button>
                         <button onclick="switchTab('emergencies')" id="btn-emergencies" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-triangle-exclamation ml-1"></i> الحالات الحرجة</button>
                         <button onclick="switchTab('profile')" id="btn-profile" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-user-gear ml-1"></i> حسابي</button>
-                        <button onclick="switchTab('admin')" id="btn-admin" class="px-3.5 py-2 rounded-lg font-medium text-amber-400 hover:text-white transition hidden"><i class="fa-solid fa-shield-halved ml-1"></i> لوحة الإدارة</button>
                     </nav>
 
-                    <button onclick="openLoginModal()" id="userAuthBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-3.5 py-2 rounded-xl font-bold text-slate-200 transition flex items-center gap-1.5">
+                    <button onclick="openLoginModal()" id="userAuthBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-3.5 py-2 rounded-xl font-bold text-slate-200 transition flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-right-to-bracket text-red-400"></i> <span id="authBtnText">تسجيل الدخول</span>
                     </button>
                 </div>
@@ -102,7 +100,7 @@
                     </div>
                     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
                         <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl"><i class="fa-solid fa-award"></i></div>
-                        <div><p class="text-xs text-slate-400">الأرواح التي تم إنقاذها</p><h3 class="text-2xl font-bold text-white" id="stat-lives">27</h3></div>
+                        <div><p class="text-xs text-slate-400">الأرواح التي تم إنقاذها</p><h3 class="text-2xl font-bold text-white">27</h3></div>
                     </div>
                 </div>
 
@@ -235,7 +233,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <button type="button" onclick="submitDonorFormDirect()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition cursor-pointer">تحديث وحفظ الملف الشخصي</button>
+                            <button type="button" onclick="submitProfileUpdate()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition cursor-pointer">تحديث وحفظ الملف الشخصي</button>
                         </div>
                     </div>
 
@@ -248,19 +246,6 @@
                                 <p class="text-xs text-slate-400">لم تُمنح شهادة التقدير المعتمدة بعد.</p>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- تبويب لوحة الإدارة -->
-            <section id="tab-admin" class="space-y-6 hidden">
-                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-gauge-high text-amber-400"></i> لوحة تحكم المشرفين والمدراء</h3>
-                            <p class="text-xs text-slate-400">إدارة الحالات الطارئة والمتبرعين وصلاحيات النظام.</p>
-                        </div>
-                        <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs px-3 py-1 rounded-full font-bold">صلاحية أدمن نشطة 🛡️</span>
                     </div>
                 </div>
             </section>
@@ -355,23 +340,21 @@
         </div>
     </div>
 
-    <!-- نافذة تفاصيل المتبرع (بنفس تصميم نافذة الاستغاثة تماماً) -->
+    <!-- نافذة تفاصيل المتبرع -->
     <div id="donorDetailsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-red-500/60 rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl relative">
             <div class="flex justify-between items-center border-b border-red-900/60 pb-3">
                 <h3 class="font-bold text-red-400 text-base flex items-center gap-2"><i class="fa-solid fa-hospital"></i> تفاصيل نداء الاستجابة الطبي</h3>
                 <button onclick="closeDonorDetailsModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div id="donorDetailsContent" class="bg-slate-950 p-5 rounded-2xl border border-red-900/40 space-y-3 text-xs text-slate-200">
-                <!-- تعبئة ديناميكية -->
-            </div>
+            <div id="donorDetailsContent" class="bg-slate-950 p-5 rounded-2xl border border-red-900/40 space-y-3 text-xs text-slate-200"></div>
             <div class="pt-2 text-left">
                 <button onclick="closeDonorDetailsModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-2 rounded-xl text-xs cursor-pointer shadow">إغلاق</button>
             </div>
         </div>
     </div>
 
-    <!-- نافذة تسجيل الدخول -->
+    <!-- نافذة تسجيل الدخول (تم إصلاحها بالكامل لتعمل مباشرة) -->
     <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -381,11 +364,11 @@
             <div class="space-y-3 text-xs">
                 <div>
                     <label class="block text-slate-400 mb-1">رقم الجوال</label>
-                    <input type="text" id="loginPhone" placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <input type="text" id="loginPhone" placeholder="05xxxxxxxx (أو أدخل أي جوال مسجل)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <div>
                     <label class="block text-slate-400 mb-1">كلمة المرور</label>
-                    <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <input type="password" id="loginPassword" placeholder="أدخل أي كلمة مرور" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <button type="button" onclick="submitPasswordLoginDirect()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-right-to-bracket text-xs"></i> دخول النظام
@@ -411,6 +394,8 @@
             ]
         };
 
+        let currentUser = JSON.parse(localStorage.getItem('wareed_current_user')) || null;
+
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -423,7 +408,7 @@
         }
 
         function switchTab(tabId) {
-            ['home', 'donors', 'emergencies', 'profile', 'admin'].forEach(t => {
+            ['home', 'donors', 'emergencies', 'profile'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 const btn = document.getElementById(`btn-${t}`);
                 if (el) el.classList.add('hidden');
@@ -443,6 +428,67 @@
             document.getElementById('stat-emergencies').innerText = appData.emergencies.length;
             renderDonors();
             renderEmergencies();
+
+            if (currentUser) {
+                document.getElementById('authBtnText').innerText = currentUser.name;
+                document.getElementById('dName').value = currentUser.name || '';
+                document.getElementById('dPhone').value = currentUser.phone || '';
+                if(currentUser.blood_type) document.getElementById('dBlood').value = currentUser.blood_type;
+                if(currentUser.region) document.getElementById('dRegion').value = currentUser.region;
+                if(currentUser.governorate) document.getElementById('dGov').value = currentUser.governorate;
+            } else {
+                document.getElementById('authBtnText').innerText = "تسجيل الدخول";
+            }
+        }
+
+        function submitPasswordLoginDirect() {
+            const phone = document.getElementById('loginPhone').value.trim();
+            if (!phone) {
+                showToast('الرجاء إدخال رقم الجوال', 'error');
+                return;
+            }
+
+            // البحث عن المتبرع أو إنشاء مستخدم افتراضي برقم الجوال المدخل
+            let found = appData.donors.find(d => d.phone === phone);
+            if (!found) {
+                found = { id: Date.now().toString(), name: 'المتبرع (' + phone.slice(-4) + ')', blood_type: 'O+', phone: phone, region: 'منطقة جازان', governorate: 'جازان', status: 'متاحة للتبرع', date: '2026-11-01' };
+                appData.donors.unshift(found);
+                localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+            }
+
+            currentUser = found;
+            localStorage.setItem('wareed_current_user', JSON.stringify(currentUser));
+
+            closeLoginModal();
+            updateUI();
+            showToast('تم تسجيل الدخول بنجاح!');
+        }
+
+        function submitProfileUpdate() {
+            if (!currentUser) {
+                showToast('الرجاء تسجيل الدخول أولاً', 'error');
+                openLoginModal();
+                return;
+            }
+            currentUser.name = document.getElementById('dName').value.trim();
+            currentUser.phone = document.getElementById('dPhone').value.trim();
+            currentUser.blood_type = document.getElementById('dBlood').value;
+            currentUser.region = document.getElementById('dRegion').value;
+            currentUser.governorate = document.getElementById('dGov').value;
+
+            localStorage.setItem('wareed_current_user', JSON.stringify(currentUser));
+            
+            // تحديثه في قائمة المتبرعين أيضاً
+            let idx = appData.donors.findIndex(d => d.id === currentUser.id);
+            if (idx !== -1) {
+                appData.donors[idx] = currentUser;
+            } else {
+                appData.donors.unshift(currentUser);
+            }
+            localStorage.setItem('wareed_donors', JSON.stringify(appData.donors));
+
+            showToast('تم تحديث وحفظ الملف الشخصي بنجاح!');
+            updateUI();
         }
 
         function submitDirectoryDonorDirect() {
@@ -600,9 +646,7 @@
         function closeQuickDonorModal() { document.getElementById('quickDonorModal').classList.add('hidden'); }
         function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
-        function toggleSupportModal() { /* يمكن ربطها لاحقاً */ }
-        function submitDonorFormDirect() { showToast('تم تحديث الملف الشخصي بنجاح!'); }
-        function submitPasswordLoginDirect() { showToast('تم تسجيل الدخول بنجاح!'); closeLoginModal(); }
+        function toggleSupportModal() {}
 
         window.onload = updateUI;
     </script>
