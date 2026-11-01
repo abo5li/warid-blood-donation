@@ -87,7 +87,7 @@
                     </div>
                 </div>
 
-                <!-- جدول التوافق والإحصائيات -->
+                <!-- جدول التوافق والشروط -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
                     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
                         <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
@@ -135,6 +135,7 @@
                     </div>
                 </div>
 
+                <!-- الإحصائيات -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
                         <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl"><i class="fa-solid fa-users"></i></div>
@@ -149,9 +150,21 @@
                         <div><p class="text-xs text-slate-400">الأرواح التي تم إنقاذها</p><h3 class="text-2xl font-bold text-white" id="stat-lives">27</h3></div>
                     </div>
                 </div>
+
+                <!-- قائمة المتبرعين المباشرة في الرئيسية -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users text-red-500"></i> قائمة المتبرعين النشطين في المنصة</h3>
+                            <p class="text-xs text-slate-400">نخبة المتبرعين المستعدين للاستجابة السريعة لنداءات الإنقاذ.</p>
+                        </div>
+                        <button onclick="switchTab('donors')" class="text-xs text-red-400 hover:text-red-300 font-bold flex items-center gap-1">عرض الكل <i class="fa-solid fa-arrow-left"></i></button>
+                    </div>
+                    <div id="homeDonorsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
             </section>
 
-            <!-- تبويب المتبرعين -->
+            <!-- تبويب المتبرعين الكامل -->
             <section id="tab-donors" class="space-y-6 hidden">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl">
                     <div>
@@ -339,7 +352,7 @@
         </div>
     </div>
 
-    <!-- نافذة تسجيل الدخول (بدون قيم افتراضية لكي لا تظهر بيانات شخصية لأحد) -->
+    <!-- نافذة تسجيل الدخول -->
     <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -451,11 +464,9 @@
             const res = await fetch('/api/data');
             appData = await res.json();
             
-            // تحديث حالة المستخدم الحالي القادمة من الجلسة الآمنة للسيرفر
             if (appData.current_user) {
                 currentUser = appData.current_user;
                 document.getElementById('authBtnText').innerText = currentUser.name;
-                // تعبئة حقول البروفايل ببيانات المستخدم المسجل دخوله فعلياً
                 document.getElementById('dName').value = currentUser.name || '';
                 document.getElementById('dPhone').value = currentUser.phone || '';
                 document.getElementById('dGov').value = currentUser.governorate || '';
@@ -536,6 +547,7 @@
             document.getElementById('stat-requests').innerText = appData.requests.length;
             renderCases();
             renderDonorsDirectory();
+            renderHomeDonors();
             renderAdminTables();
             checkAdminPermission();
             renderCertificateSection();
@@ -548,6 +560,31 @@
             } else {
                 adminBtn.classList.add('hidden');
             }
+        }
+
+        function renderHomeDonors() {
+            const grid = document.getElementById('homeDonorsGrid');
+            if (!grid) return;
+            if (appData.donors.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 text-xs"><p>لا يوجد متبرعون مسجلون حالياً</p></div>`;
+                return;
+            }
+            grid.innerHTML = appData.donors.slice(0, 3).map(d => `
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3 shadow flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">${appData.roles[d.role] || 'متبرع'}</span>
+                            <span class="text-xs bg-slate-900 px-2.5 py-0.5 rounded-lg text-red-400 font-extrabold border border-slate-800">${d.blood_type}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-100 text-xs"><i class="fa-solid fa-user-check text-emerald-400 ml-1"></i> ${d.name}</h4>
+                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-mono text-[10px]">${d.phone}</span>
+                        <a href="tel:${d.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="fa-solid fa-phone"></i> اتصال</a>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function renderDonorsDirectory() {
