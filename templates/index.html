@@ -21,7 +21,7 @@
 
     <div id="toastContainer" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-md px-4 pointer-events-none"></div>
 
-    <!-- الزر العائم لمركز الدعم يمين الشاشة -->
+    <!-- زر الدعم الفني العائم -->
     <button onclick="toggleSupportModal()" class="fixed right-5 bottom-8 z-50 bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-2xl transition flex items-center justify-center gap-2 group cursor-pointer border border-red-400/35">
         <i class="fa-solid fa-headset text-2xl group-hover:rotate-12 transition"></i>
         <span class="text-xs font-bold hidden md:inline ml-1">الدعم والأسئلة الشائعة</span>
@@ -42,7 +42,6 @@
                     <nav class="flex items-center bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 text-xs gap-1">
                         <button onclick="switchTab('home')" id="btn-home" class="px-3.5 py-2 rounded-lg font-bold bg-red-600 text-white transition"><i class="fa-solid fa-house ml-1"></i> الرئيسية</button>
                         <button onclick="switchTab('donors')" id="btn-donors" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-users ml-1"></i> المتبرعون</button>
-                        <button onclick="switchTab('cases')" id="btn-cases" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-clipboard-list ml-1"></i> الحالات الطارئة</button>
                         <button onclick="switchTab('profile')" id="btn-profile" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-user-gear ml-1"></i> حسابي</button>
                         <button onclick="switchTab('admin')" id="btn-admin" class="px-3.5 py-2 rounded-lg font-medium text-amber-400 hover:text-white transition hidden"><i class="fa-solid fa-shield-halved ml-1"></i> لوحة الإدارة</button>
                     </nav>
@@ -74,21 +73,29 @@
                     <div class="space-y-4 text-center md:text-right flex-1">
                         <span class="bg-red-500/20 text-red-400 border border-red-500/30 text-xs px-3 py-1 rounded-full font-bold">بنوك الدم وبصمة الإنسانية</span>
                         <h2 class="text-2xl md:text-3xl font-extrabold text-white">تبرعك اليوم يصنع معجزة حياة غدًا</h2>
-                        <p class="text-xs md:text-sm text-slate-300 leading-relaxed max-w-xl">المتبرع بالدم يمنح أملًا جديدًا للمصابين والمرضى في كافة مستشفيات المملكة. اتبع خطى القدوة وانضم لنخبة المنقذين الآن عبر شبكة وريد.</p>
+                        <p class="text-xs md:text-sm text-slate-300 leading-relaxed max-w-xl">المتبرع بالدم يمنح أملًا جديدًا للمصابين والمرضى في كافة مستشفيات المملكة. انضم لنخبة المنقذين الآن عبر شبكة وريد.</p>
                         
-                        <!-- الأزرار المحدثة تماماً حسب طلبك -->
-                        <div class="flex flex-col sm:flex-row gap-3 pt-3 justify-center md:justify-start">
-                            <button onclick="switchTab('cases'); openRequestModal();" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-3 rounded-xl shadow-lg transition text-center flex items-center justify-center gap-2 text-xs cursor-pointer">
-                                <i class="fa-solid fa-truck-medical"></i> أحتاج متبرعاً (نداء طارئ)
-                            </button>
+                        <div class="flex flex-col sm:flex-row gap-3 pt-3 justify-center md:justify-start flex-wrap">
                             <button onclick="openQuickDonorModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl shadow-lg transition text-center flex items-center justify-center gap-2 text-xs cursor-pointer">
                                 <i class="fa-solid fa-user-plus"></i> تسجيل متبرع جديد
+                            </button>
+                            <button onclick="openEmergencyModal()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-3 rounded-xl shadow-lg shadow-red-900/50 transition text-center flex items-center justify-center gap-2 text-xs cursor-pointer animate-pulse border border-red-400">
+                                <i class="fa-solid fa-triangle-exclamation"></i> إضافة حالة طارئة حرجة
                             </button>
                             <button onclick="switchTab('donors')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-5 py-3 rounded-xl shadow transition text-center flex items-center justify-center gap-2 text-xs cursor-pointer">
                                 <i class="fa-solid fa-users text-red-400"></i> استعراض قائمة المتبرعين
                             </button>
                         </div>
                     </div>
+                </div>
+
+                <!-- قسم الحالات الحرجة الطارئة النشطة -->
+                <div id="emergencySectionContainer" class="space-y-4 hidden">
+                    <div class="flex items-center gap-2 border-b border-red-900/50 pb-3">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-lg animate-bounce"></i>
+                        <h3 class="text-base font-extrabold text-red-400">الحالات الطارئة الحرجة (تتطلب استجابة فورية)</h3>
+                    </div>
+                    <div id="emergencyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <!-- جدول التوافق والشروط -->
@@ -140,14 +147,10 @@
                 </div>
 
                 <!-- الإحصائيات -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
                         <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl"><i class="fa-solid fa-users"></i></div>
                         <div><p class="text-xs text-slate-400">إجمالي المتبرعين النشطين</p><h3 class="text-2xl font-bold text-white" id="stat-donors">0</h3></div>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
-                        <div class="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 text-2xl"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <div><p class="text-xs text-slate-400">الطلبات والحالات الطارئة</p><h3 class="text-2xl font-bold text-white" id="stat-requests">0</h3></div>
                     </div>
                     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
                         <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl"><i class="fa-solid fa-award"></i></div>
@@ -155,12 +158,12 @@
                     </div>
                 </div>
 
-                <!-- قائمة المتبرعين المباشرة في الرئيسية -->
+                <!-- قائمة المتبرعين في الرئيسية -->
                 <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
                         <div>
                             <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users text-red-500"></i> قائمة المتبرعين النشطين في المنصة</h3>
-                            <p class="text-xs text-slate-400">نخبة المتبرعين المستعدين للاستجابة السريعة لنداءات الإنقاذ.</p>
+                            <p class="text-xs text-slate-400">نخبة المتبرعين المسجلين في الشبكة.</p>
                         </div>
                         <button onclick="switchTab('donors')" class="text-xs text-red-400 hover:text-red-300 font-bold flex items-center gap-1 cursor-pointer">عرض الكل <i class="fa-solid fa-arrow-left"></i></button>
                     </div>
@@ -168,38 +171,60 @@
                 </div>
             </section>
 
-            <!-- تبويب المتبرعين الكامل -->
+            <!-- تبويب المتبرعين الكامل مع نموذج تعبئة البيانات -->
             <section id="tab-donors" class="space-y-6 hidden">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-                    <div>
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users text-red-500"></i> قائمة المتبرعين المسجلين في الشبكة</h3>
-                        <p class="text-xs text-slate-400">استعراض أسماء المتبرعين، فصائل الدم، ومواقعهم الجغرافية.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- نموذج تعبئة بيانات متبرع جديد -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+                            <i class="fa-solid fa-user-plus text-blue-400"></i> تعبئة بيانات متبرع جديد
+                        </h3>
+                        <form id="directoryDonorForm" onsubmit="submitDirectoryDonor(event)" class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1">اسم المتبرع الكامل</label>
+                                <input type="text" id="dirName" required placeholder="مثال: صالح العمري" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-slate-400 mb-1">فصيلة الدم</label>
+                                    <select id="dirBlood" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-red-400 font-bold outline-none">
+                                        <option>O-</option><option>O+</option><option>A-</option><option>A+</option><option>B-</option><option>B+</option><option>AB-</option><option>AB+</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1">رقم الجوال</label>
+                                    <input type="text" id="dirPhone" required placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-slate-400 mb-1">المنطقة</label>
+                                    <select id="dirRegion" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                                        <option>منطقة جازان</option><option>منطقة الرياض</option><option>منطقة مكة المكرمة</option><option>المنطقة الشرقية</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-400 mb-1">المحافظة</label>
+                                    <input type="text" id="dirGov" required placeholder="المحافظة" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition cursor-pointer">
+                                <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ وتسجيل المتبرع
+                            </button>
+                        </form>
                     </div>
-                    <div class="flex items-center gap-3 w-full md:w-auto">
-                        <input type="text" id="filterDonorSearch" oninput="renderDonorsDirectory()" placeholder="بحث بالاسم أو المحافظة..." class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs outline-none focus:border-red-500 w-60">
-                    </div>
-                </div>
-                <div id="donorsDirectoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </section>
 
-            <!-- تبويب الحالات الطارئة -->
-            <section id="tab-cases" class="space-y-6 hidden">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-                    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                        <input type="text" id="filterSearch" oninput="renderCases()" placeholder="بحث باسم المتبرع..." class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs outline-none focus:border-red-500 w-64">
-                        <select id="filterBlood" onchange="renderCases()" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs outline-none text-red-400 font-bold">
-                            <option value="">جميع الفصائل</option>
-                            <option value="O-">O-</option><option value="O+">O+</option>
-                            <option value="A-">A-</option><option value="A+">A+</option>
-                            <option value="B-">B-</option><option value="B+">B+</option>
-                            <option value="AB-">AB-</option><option value="AB+">AB+</option>
-                        </select>
+                    <!-- قائمة استعراض وبحث المتبرعين -->
+                    <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-3 border-b border-slate-800 pb-3">
+                            <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-users text-red-500"></i> قائمة المتبرعين المسجلين
+                            </h3>
+                            <input type="text" id="filterDonorSearch" oninput="renderDonorsDirectory()" placeholder="بحث بالاسم أو المحافظة..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs outline-none focus:border-red-500 w-full sm:w-56">
+                        </div>
+                        <div id="donorsDirectoryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-1"></div>
                     </div>
-                    <button onclick="openRequestModal()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow flex items-center gap-2 cursor-pointer">
-                        <i class="fa-solid fa-plus"></i> أحتاج متبرعاً (نداء طارئ)
-                    </button>
                 </div>
-                <div id="casesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </section>
 
             <!-- تبويب حسابي -->
@@ -268,16 +293,12 @@
                     <div class="flex justify-between items-center border-b border-slate-800 pb-4">
                         <div>
                             <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-gauge-high text-amber-400"></i> لوحة تحكم المشرفين والمدراء</h3>
-                            <p class="text-xs text-slate-400">إدارة الحالات الطارئة، رسائل الدعم الفني، وتعديل الصلاحيات.</p>
+                            <p class="text-xs text-slate-400">إدارة رسائل الدعم الفني، الحالات الطارئة، وتعديل الصلاحيات.</p>
                         </div>
                         <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs px-3 py-1 rounded-full font-bold">صلاحية أدمن نشطة 🛡️</span>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-3">
-                            <h4 class="font-bold text-slate-200 text-sm">الحالات الطارئة النشطة</h4>
-                            <div id="adminRequestsList" class="space-y-3 max-h-96 overflow-y-auto text-xs"></div>
-                        </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-3">
                             <h4 class="font-bold text-slate-200 text-sm">رسائل الدعم الفني الواردة</h4>
                             <div id="adminMessagesList" class="space-y-3 max-h-96 overflow-y-auto text-xs"></div>
@@ -292,7 +313,7 @@
         </main>
     </div>
 
-    <!-- نافذة تسجيل متبرع جديد السريعة (باللون الأزرق للزر الرئيسي) -->
+    <!-- نافذة تسجيل متبرع جديد السريعة -->
     <div id="quickDonorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-md w-full space-y-5 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -333,6 +354,65 @@
         </div>
     </div>
 
+    <!-- نافذة إضافة حالة طارئة حرجة -->
+    <div id="emergencyModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-red-600 rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-5 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-red-900/60 pb-3">
+                <h3 class="font-bold text-red-400 text-base flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation animate-bounce"></i> إطلاق استغاثة حالة طارئة حرجة</h3>
+                <button onclick="closeEmergencyModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="emergencyForm" onsubmit="submitEmergencyCase(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-300 mb-1 font-bold">اسم المريض أو المصاب</label>
+                    <input type="text" id="ePatientName" required placeholder="مثال: محمد عبدالله" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-bold">فصيلة الدم المطلوبة</label>
+                        <select id="eBlood" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-red-400 font-bold outline-none">
+                            <option>O-</option><option>O+</option><option>A-</option><option>A+</option><option>B-</option><option>B+</option><option>AB-</option><option>AB+</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-bold">رقم التواصل العاجل</label>
+                        <input type="text" id="ePhone" required placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-bold">المستشفى أو المركز الطبي</label>
+                        <input type="text" id="eHospital" required placeholder="مثال: مستشفى الملك فهد" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 mb-1 font-bold">المنطقة / المحافظة</label>
+                        <input type="text" id="eLocation" required placeholder="مثال: جازان" class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-300 mb-1 font-bold">تفاصيل وحالة الطوارئ الإضافية</label>
+                    <textarea id="eDetails" required rows="2" placeholder="اكتب تفاصيل الحالة أو الوحدات المطلوبة..." class="w-full bg-slate-950 border border-red-900/50 rounded-xl p-3 text-slate-100 outline-none focus:border-red-500 resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-extrabold py-3.5 rounded-xl shadow-lg shadow-red-900/50 transition mt-2 cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bullhorn"></i> نشر الاستغاثة الحرجة فوراً
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل المتبرع -->
+    <div id="detailsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-red-500 text-base flex items-center gap-2"><i class="fa-solid fa-user-check"></i> تفاصيل ملف المتبرع</h3>
+                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="detailsModalContent" class="space-y-3 text-xs text-slate-200"></div>
+            <div class="pt-3 border-t border-slate-800 text-left">
+                <button onclick="closeDetailsModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
     <!-- نافذة الدعم والأسئلة الشائعة -->
     <div id="supportModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-xl w-full space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -342,28 +422,9 @@
             </div>
 
             <div class="space-y-3 text-xs">
-                <h4 class="font-bold text-red-400 text-sm flex items-center gap-1.5"><i class="fa-solid fa-circle-question"></i> الأسئلة الشائعة (اضغط لعرض الإجابة)</h4>
-                
-                <div class="space-y-2">
-                    <div class="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
-                        <button onclick="toggleFaq(1)" class="w-full text-right p-3 font-bold text-white flex justify-between items-center hover:bg-slate-900 transition cursor-pointer">
-                            <span>س: كيف يمكنني تسجيل طلب نداء طارئ للتبرع بالدم؟</span>
-                            <i id="faq-icon-1" class="fa-solid fa-chevron-down text-xs text-red-400"></i>
-                        </button>
-                        <div id="faq-ans-1" class="hidden p-3 bg-slate-900/50 border-t border-slate-800 text-slate-300">
-                            ج: اضغط على زر "أحتاج متبرعاً" في الرئيسية ثم عبئ بيانات المتبرع والحالة لإطلاق الاستغاثة فوراً للشبكة.
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
-                        <button onclick="toggleFaq(2)" class="w-full text-right p-3 font-bold text-white flex justify-between items-center hover:bg-slate-900 transition cursor-pointer">
-                            <span>س: كيف أحصل على شهادة تقدير التبرع المعتمدة؟</span>
-                            <i id="faq-icon-2" class="fa-solid fa-chevron-down text-xs text-red-400"></i>
-                        </button>
-                        <div id="faq-ans-2" class="hidden p-3 bg-slate-900/50 border-t border-slate-800 text-slate-300">
-                            ج: عند تسجيك كمتبرع وتأكيد جاهزيتك، يقوم مشرفو المنصة بمنحك الشهادة وتفعيلها لطباعتها.
-                        </div>
-                    </div>
+                <h4 class="font-bold text-red-400 text-sm flex items-center gap-1.5"><i class="fa-solid fa-circle-question"></i> الأسئلة الشائعة</h4>
+                <div class="bg-slate-950 rounded-xl border border-slate-800 p-3 text-slate-300">
+                    ج: يمكنك تعبئة بيانات متبرع جديد من تبويب "المتبرعـون" واستعراض كافة المسجلين بشكل فوري.
                 </div>
             </div>
 
@@ -379,20 +440,6 @@
                         <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة للدعم الفني
                     </button>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة تفاصيل الحالة -->
-    <div id="detailsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="font-bold text-red-500 text-base flex items-center gap-2"><i class="fa-solid fa-hospital"></i> تفاصيل نداء الاستغاثة الطبي</h3>
-                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div id="detailsModalContent" class="space-y-3 text-xs text-slate-200"></div>
-            <div class="pt-3 border-t border-slate-800 text-left">
-                <button onclick="closeDetailsModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">إغلاق</button>
             </div>
         </div>
     </div>
@@ -420,63 +467,16 @@
         </div>
     </div>
 
-    <!-- نافذة إطلاق نداء دم طارئ -->
-    <div id="requestModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-md w-full space-y-5 shadow-2xl">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="font-bold text-red-500 text-base"><i class="fa-solid fa-truck-medical ml-1"></i> إطلاق نداء دم طارئ</h3>
-                <button onclick="closeRequestModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="emergencyForm" onsubmit="submitEmergency(event)" class="space-y-3 text-xs">
-                <div>
-                    <label class="block text-slate-400 mb-1">اسم المتبرع</label>
-                    <input type="text" id="reqDonorName" required placeholder="أدخل اسم المتبرع" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-slate-400 mb-1">المنطقة</label>
-                        <select id="reqRegion" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
-                            <option>منطقة جازان</option><option>منطقة الرياض</option><option>منطقة مكة المكرمة</option><option>المنطقة الشرقية</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">المحافظة</label>
-                        <input type="text" id="reqGov" required placeholder="المحافظة" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-slate-400 mb-1">الفصيلة</label>
-                        <select id="reqBlood" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-red-400 font-bold outline-none">
-                            <option>O-</option><option>O+</option><option>A-</option><option>A+</option><option>B-</option><option>B+</option><option>AB-</option><option>AB+</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">الاستعجال</label>
-                        <select id="reqUrgency" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-blue-400 font-bold outline-none">
-                            <option>عاجل</option><option>متوسط</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-slate-400 mb-1">رقم التواصل</label>
-                    <input type="text" id="reqContact" required placeholder="05xxxxxxxx" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
-                </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition mt-2 cursor-pointer">نشر النداء</button>
-            </form>
-        </div>
-    </div>
-
     <footer class="bg-slate-900 border-t border-slate-800 text-center py-4 mt-12 text-xs text-slate-400">
         <div class="container mx-auto space-y-1">
             <p>جميع الحقوق محفوظة © 2026 - منصة <span class="text-red-500 font-bold">وريد</span> الطبية الذكية.</p>
         </div>
     </footer>
 
-    <!-- جافاسكريبت التطبيق بالكامل -->
+    <!-- جافاسكريبت التطبيق -->
     <script>
         const socket = io();
-        let appData = { donors: [], requests: [], messages: [], roles: {} };
+        let appData = { donors: [], emergencies: [], messages: [], roles: {} };
         let currentUser = null;
 
         function showToast(message, type = 'success') {
@@ -522,18 +522,6 @@
             document.getElementById('supportModal').classList.toggle('hidden');
         }
 
-        function toggleFaq(id) {
-            const ans = document.getElementById(`faq-ans-${id}`);
-            const icon = document.getElementById(`faq-icon-${id}`);
-            if(ans.classList.contains('hidden')) {
-                ans.classList.remove('hidden');
-                icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-            } else {
-                ans.classList.add('hidden');
-                icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-            }
-        }
-
         async function submitSupportMessage(e) {
             e.preventDefault();
             const name = document.getElementById('supName').value;
@@ -558,7 +546,7 @@
         }
 
         function switchTab(tabId) {
-            ['home', 'donors', 'cases', 'profile', 'admin'].forEach(t => {
+            ['home', 'donors', 'profile', 'admin'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 const btn = document.getElementById(`btn-${t}`);
                 if (el) el.classList.add('hidden');
@@ -579,10 +567,9 @@
 
         function updateUI() {
             document.getElementById('stat-donors').innerText = appData.donors.length;
-            document.getElementById('stat-requests').innerText = appData.requests.length;
-            renderCases();
             renderDonorsDirectory();
             renderHomeDonors();
+            renderEmergencyCases();
             renderAdminTables();
             checkAdminPermission();
             renderCertificateSection();
@@ -597,6 +584,91 @@
             }
         }
 
+        function openEmergencyModal() { document.getElementById('emergencyModal').classList.remove('hidden'); }
+        function closeEmergencyModal() { document.getElementById('emergencyModal').classList.add('hidden'); }
+
+        async function submitEmergencyCase(e) {
+            e.preventDefault();
+            const res = await fetch('/api/emergency/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    patient_name: document.getElementById('ePatientName').value,
+                    blood_type: document.getElementById('eBlood').value,
+                    phone: document.getElementById('ePhone').value,
+                    hospital: document.getElementById('eHospital').value,
+                    location: document.getElementById('eLocation').value,
+                    details: document.getElementById('eDetails').value
+                })
+            });
+            const data = await res.json();
+            if(data.status === 'success') {
+                showToast('تم نشر الاستغاثة الحرجة بنجاح!');
+                closeEmergencyModal();
+                document.getElementById('emergencyForm').reset();
+                fetchData();
+            } else {
+                showToast(data.message, 'error');
+            }
+        }
+
+        async function submitDirectoryDonor(e) {
+            e.preventDefault();
+            const res = await fetch('/api/register-donor', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    name: document.getElementById('dirName').value,
+                    blood_type: document.getElementById('dirBlood').value,
+                    phone: document.getElementById('dirPhone').value,
+                    region: document.getElementById('dirRegion').value,
+                    governorate: document.getElementById('dirGov').value
+                })
+            });
+            const data = await res.json();
+            showToast('تم تسجيل وتعبئة بيانات المتبرع بنجاح!');
+            document.getElementById('directoryDonorForm').reset();
+            fetchData();
+        }
+
+        function renderEmergencyCases() {
+            const container = document.getElementById('emergencySectionContainer');
+            const grid = document.getElementById('emergencyGrid');
+            if (!container || !grid) return;
+
+            if (!appData.emergencies || appData.emergencies.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            grid.innerHTML = appData.emergencies.map(em => `
+                <div class="bg-gradient-to-br from-red-950/90 via-slate-900 to-slate-900 border-2 border-red-600 rounded-3xl p-5 shadow-2xl relative flex flex-col justify-between space-y-4">
+                    <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-xl font-extrabold text-xs shadow">
+                        ${em.blood_type} 🩸
+                    </div>
+                    <div class="absolute top-4 right-4 bg-red-500/20 text-red-300 border border-red-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold animate-pulse">
+                        حالة طارئة حرجة
+                    </div>
+
+                    <div class="space-y-2 pt-6">
+                        <h4 class="font-black text-white text-sm flex items-center gap-1.5"><i class="fa-solid fa-hospital-user text-red-400"></i> ${em.patient_name}</h4>
+                        <p class="text-xs text-slate-300"><i class="fa-solid fa-hospital ml-1 text-red-400"></i> ${em.hospital} - ${em.location}</p>
+                        <p class="text-xs text-red-200/90 bg-red-950/60 p-2.5 rounded-xl border border-red-900/50"><strong>التفاصيل:</strong> ${em.details}</p>
+                    </div>
+
+                    <div class="pt-2 border-t border-red-900/50 flex justify-between items-center text-xs">
+                        <span class="text-slate-300 font-mono font-bold">${em.phone}</span>
+                        <div class="flex items-center gap-2">
+                            <a href="tel:${em.phone}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-1 shadow-lg shadow-red-900/50">
+                                <i class="fa-solid fa-phone-volume"></i> اتصال عاجل
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function renderHomeDonors() {
             const grid = document.getElementById('homeDonorsGrid');
             if (!grid) return;
@@ -605,18 +677,33 @@
                 return;
             }
             grid.innerHTML = appData.donors.slice(0, 3).map(d => `
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3 shadow flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-start">
-                            <span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">${appData.roles[d.role] || 'متبرع'}</span>
-                            <span class="text-xs bg-slate-900 px-2.5 py-0.5 rounded-lg text-red-400 font-extrabold border border-slate-800">${d.blood_type}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-100 text-xs"><i class="fa-solid fa-user-check text-emerald-400 ml-1"></i> ${d.name}</h4>
-                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl relative flex flex-col justify-between space-y-4">
+                    <div class="absolute top-4 left-4 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 text-red-400 font-extrabold text-xs">
+                        ${d.blood_type}
                     </div>
-                    <div class="pt-2 border-t border-slate-800/80 flex justify-between items-center text-xs">
-                        <span class="text-slate-400 font-mono text-[10px]">${d.phone}</span>
-                        <a href="tel:${d.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="fa-solid fa-phone"></i> اتصال</a>
+                    <div class="absolute top-4 right-4 bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">
+                        ${appData.roles[d.role] || 'متبرع مسجل'}
+                    </div>
+
+                    <div class="space-y-2 pt-6">
+                        <h4 class="font-bold text-slate-100 text-sm flex items-center gap-1.5"><i class="fa-solid fa-user-check text-emerald-400"></i> ${d.name}</h4>
+                        <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
+                    </div>
+
+                    <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-center text-xs text-emerald-400 font-medium">
+                        الحالة: متاحة للتبرع الفوري
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
+                        <span class="text-slate-400 font-mono text-xs">${d.phone}</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="showDetails('${d.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2 rounded-xl transition cursor-pointer" title="عرض التفاصيل">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <a href="tel:${d.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl font-bold flex items-center gap-1 shadow">
+                                <i class="fa-solid fa-phone"></i> اتصال
+                            </a>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -638,78 +725,50 @@
             }
 
             grid.innerHTML = filtered.map(d => `
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl flex flex-col justify-between">
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-start">
-                            <span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">${appData.roles[d.role] || 'متبرع'}</span>
-                            <span class="text-xs bg-slate-950 px-3 py-1 rounded-lg text-red-400 font-extrabold border border-slate-800">${d.blood_type}</span>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-100 text-sm flex items-center gap-1.5"><i class="fa-solid fa-user-check text-emerald-400"></i> ${d.name}</h4>
-                            <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
-                        </div>
-                        <div class="flex items-center gap-2 text-[11px] text-slate-300 bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-                            <i class="fa-solid fa-circle text-emerald-500 text-[8px] animate-ping"></i>
-                            <span>الحالة: <strong class="text-emerald-400">${d.status}</strong></span>
-                            ${d.certified ? '<span class="mr-auto bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded text-[10px] border border-amber-500/30">🏅 معتمد</span>' : ''}
-                        </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 shadow-xl relative flex flex-col justify-between space-y-3">
+                    <div class="absolute top-3 left-3 bg-slate-950 px-2.5 py-0.5 rounded-lg border border-slate-800 text-red-400 font-extrabold text-xs">
+                        ${d.blood_type}
                     </div>
-                    <div class="pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+                    <div class="absolute top-3 right-3 bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[9px] px-2 py-0.5 rounded-full font-bold">
+                        ${appData.roles[d.role] || 'متبرع مسجل'}
+                    </div>
+
+                    <div class="space-y-1.5 pt-5">
+                        <h4 class="font-bold text-slate-100 text-xs flex items-center gap-1.5"><i class="fa-solid fa-user-check text-emerald-400"></i> ${d.name}</h4>
+                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
+                    </div>
+
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800 text-center text-[11px] text-emerald-400 font-medium flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-circle text-[6px] animate-ping text-emerald-500"></i>
+                        <span>الحالة: متاحة للتبرع الفوري</span>
+                        ${d.certified ? '<span class="mr-auto bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded text-[9px] border border-amber-500/30">🏅 معتمد</span>' : ''}
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
                         <span class="text-slate-400 font-mono text-[11px]">${d.phone}</span>
-                        <a href="tel:${d.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1 shadow"><i class="fa-solid fa-phone"></i> اتصال</a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderCases() {
-            const grid = document.getElementById('casesGrid');
-            const searchInput = document.getElementById('filterSearch');
-            const bloodSelect = document.getElementById('filterBlood');
-            if (!grid) return;
-            const search = searchInput ? searchInput.value.toLowerCase() : '';
-            const blood = bloodSelect ? bloodSelect.value : '';
-
-            const filtered = appData.requests.filter(req => {
-                const matchSearch = (req.donor_name && req.donor_name.toLowerCase().includes(search));
-                const matchBlood = blood === "" || req.blood_type === blood;
-                return matchSearch && matchBlood;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500"><i class="fa-solid fa-folder-open text-4xl mb-2 opacity-30"></i><p>لا توجد حالات تطابق بحثك حالياً</p></div>`;
-                return;
-            }
-
-            grid.innerHTML = filtered.map(req => `
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 shadow-xl flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-start">
-                            <span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">${req.urgency}</span>
-                            <span class="text-xs bg-slate-950 px-2.5 py-1 rounded-lg text-red-400 font-extrabold border border-slate-800">${req.blood_type}</span>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="showDetails('${d.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 p-1.5 rounded-lg transition cursor-pointer text-xs" title="عرض التفاصيل">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <a href="tel:${d.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 shadow text-xs">
+                                <i class="fa-solid fa-phone"></i> اتصال
+                            </a>
                         </div>
-                        <h4 class="font-bold text-slate-100 text-sm"><i class="fa-solid fa-user text-red-500 ml-1"></i> المتبرع: ${req.donor_name || 'غير مدخل'}</h4>
-                        <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${req.region} - ${req.governorate}</p>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
-                        <button onclick="showDetails('${req.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-bold cursor-pointer"><i class="fa-solid fa-eye ml-1"></i> عرض التفاصيل</button>
-                        <a href="tel:${req.contact_phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-bold flex items-center gap-1"><i class="fa-solid fa-phone"></i> اتصال عاجل</a>
                     </div>
                 </div>
             `).join('');
         }
 
-        function showDetails(reqId) {
-            const req = appData.requests.find(r => r.id === reqId);
-            if (!req) return;
+        function showDetails(donorId) {
+            const donor = appData.donors.find(d => d.id === donorId);
+            if (!donor) return;
             document.getElementById('detailsModalContent').innerHTML = `
-                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-                    <div><strong>اسم المتبرع:</strong> ${req.donor_name || 'غير مدخل'}</div>
-                    <div><strong>المنطقة / المحافظة:</strong> ${req.region} - ${req.governorate}</div>
-                    <div><strong>فصيلة الدم المطلوبة:</strong> <span class="text-red-400 font-bold">${req.blood_type}</span></div>
-                    <div><strong>درجة الاستعجال:</strong> <span class="text-blue-400 font-bold">${req.urgency}</span></div>
-                    <div><strong>رقم التواصل:</strong> <a href="tel:${req.contact_phone}" class="text-emerald-400 underline font-bold">${req.contact_phone}</a></div>
-                    <div><strong>تاريخ النشر:</strong> ${req.date}</div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+                    <div><strong>اسم المتبرع:</strong> <span class="text-white font-bold">${donor.name}</span></div>
+                    <div><strong>فصيلة الدم:</strong> <span class="text-red-400 font-bold">${donor.blood_type}</span></div>
+                    <div><strong>رقم التواصل:</strong> <a href="tel:${donor.phone}" class="text-emerald-400 underline font-mono font-bold">${donor.phone}</a></div>
+                    <div><strong>المنطقة / المحافظة:</strong> ${donor.region} - ${donor.governorate}</div>
+                    <div><strong>حالة الجاهزية:</strong> <span class="text-emerald-400">${donor.status}</span></div>
                 </div>
             `;
             document.getElementById('detailsModal').classList.remove('hidden');
@@ -718,17 +777,9 @@
         function closeDetailsModal() { document.getElementById('detailsModal').classList.add('hidden'); }
 
         function renderAdminTables() {
-            const reqList = document.getElementById('adminRequestsList');
             const msgList = document.getElementById('adminMessagesList');
             const donList = document.getElementById('adminDonorsList');
-            if (!reqList || !msgList || !donList) return;
-
-            reqList.innerHTML = appData.requests.map(r => `
-                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
-                    <div><strong class="text-white">${r.donor_name}</strong> (${r.blood_type})<div class="text-[10px] text-slate-400">${r.region} - ${r.date}</div></div>
-                    <div class="flex items-center gap-2"><span class="text-blue-400 font-bold">${r.urgency}</span><button onclick="adminDeleteRequest('${r.id}')" class="bg-red-600/30 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-[10px] border border-red-500/30 cursor-pointer">حذف</button></div>
-                </div>
-            `).join('') || '<p class="text-slate-500 text-center py-4">لا توجد حالات حالياً</p>';
+            if (!msgList || !donList) return;
 
             msgList.innerHTML = appData.messages.length === 0 ? '<p class="text-slate-500 text-center py-4">لا توجد رسائل دعم فني حالياً</p>' : appData.messages.map(m => `
                 <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2">
@@ -768,14 +819,6 @@
                     </div>
                 </div>
             `).join('') || '<p class="text-slate-500 text-center py-4">لا يوجد متبرعون مسجلون</p>';
-        }
-
-        async function adminDeleteRequest(reqId) {
-            if (confirm('هل أنت متأكد من رغبتك في حذف هذه الحالة؟')) {
-                await fetch(`/api/admin/delete-request/${reqId}`, { method: 'DELETE' });
-                showToast('تم حذف الحالة بنجاح');
-                fetchData();
-            }
         }
 
         async function adminDeleteMessage(msgId) {
@@ -853,9 +896,6 @@
             if(data.status === 'success') {
                 currentUser = data.donor;
                 document.getElementById('authBtnText').innerText = currentUser.name;
-                document.getElementById('dName').value = currentUser.name || '';
-                document.getElementById('dPhone').value = currentUser.phone || '';
-                document.getElementById('dGov').value = currentUser.governorate || '';
                 closeLoginModal();
                 updateUI();
                 showToast(data.message);
@@ -864,32 +904,8 @@
             }
         }
 
-        function openRequestModal() { document.getElementById('requestModal').classList.remove('hidden'); }
-        function closeRequestModal() { document.getElementById('requestModal').classList.add('hidden'); }
-
         function openQuickDonorModal() { document.getElementById('quickDonorModal').classList.remove('hidden'); }
         function closeQuickDonorModal() { document.getElementById('quickDonorModal').classList.add('hidden'); }
-
-        async function submitDonorForm(e) {
-            e.preventDefault();
-            const res = await fetch('/api/register-donor', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    name: document.getElementById('dName').value,
-                    blood_type: document.getElementById('dBlood').value,
-                    phone: document.getElementById('dPhone').value,
-                    region: document.getElementById('dRegion').value,
-                    governorate: document.getElementById('dGov').value
-                })
-            });
-            const data = await res.json();
-            currentUser = data.donor;
-            document.getElementById('authBtnText').innerText = currentUser.name;
-            showToast(data.message);
-            fetchData();
-            switchTab('donors');
-        }
 
         async function submitQuickDonor(e) {
             e.preventDefault();
@@ -911,24 +927,25 @@
             fetchData();
         }
 
-        async function submitEmergency(e) {
+        async function submitDonorForm(e) {
             e.preventDefault();
-            await fetch('/api/request-blood', {
+            const res = await fetch('/api/register-donor', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    donor_name: document.getElementById('reqDonorName').value,
-                    region: document.getElementById('reqRegion').value,
-                    governorate: document.getElementById('reqGov').value,
-                    blood_type: document.getElementById('reqBlood').value,
-                    urgency: document.getElementById('reqUrgency').value,
-                    contact_phone: document.getElementById('reqContact').value
+                    name: document.getElementById('dName').value,
+                    blood_type: document.getElementById('dBlood').value,
+                    phone: document.getElementById('dPhone').value,
+                    region: document.getElementById('dRegion').value,
+                    governorate: document.getElementById('dGov').value
                 })
             });
-            showToast('تم نشر النداء بنجاح عبر شبكة وريد!');
-            closeRequestModal();
-            document.getElementById('emergencyForm').reset();
+            const data = await res.json();
+            currentUser = data.donor;
+            document.getElementById('authBtnText').innerText = currentUser.name;
+            showToast(data.message);
             fetchData();
+            switchTab('donors');
         }
     </script>
 </body>
