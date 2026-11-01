@@ -87,7 +87,7 @@
                     </div>
                 </div>
 
-                <!-- جدول التوافق والشروط -->
+                <!-- جدول التوافق والإحصائيات -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
                     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
                         <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
@@ -135,7 +135,6 @@
                     </div>
                 </div>
 
-                <!-- الإحصائيات -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
                         <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl"><i class="fa-solid fa-users"></i></div>
@@ -150,21 +149,9 @@
                         <div><p class="text-xs text-slate-400">الأرواح التي تم إنقاذها</p><h3 class="text-2xl font-bold text-white" id="stat-lives">27</h3></div>
                     </div>
                 </div>
-
-                <!-- قائمة المتبرعين المباشرة في الرئيسية -->
-                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-4">
-                        <div>
-                            <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users text-red-500"></i> قائمة المتبرعين النشطين في المنصة</h3>
-                            <p class="text-xs text-slate-400">نخبة المتبرعين المستعدين للاستجابة السريعة لنداءات الإنقاذ.</p>
-                        </div>
-                        <button onclick="switchTab('donors')" class="text-xs text-red-400 hover:text-red-300 font-bold flex items-center gap-1">عرض الكل <i class="fa-solid fa-arrow-left"></i></button>
-                    </div>
-                    <div id="homeDonorsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                </div>
             </section>
 
-            <!-- تبويب المتبرعين الكامل -->
+            <!-- تبويب المتبرعين -->
             <section id="tab-donors" class="space-y-6 hidden">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl">
                     <div>
@@ -182,7 +169,7 @@
             <section id="tab-cases" class="space-y-6 hidden">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl">
                     <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                        <input type="text" id="filterSearch" oninput="renderCases()" placeholder="بحث باسم المتبرع..." class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs outline-none focus:border-red-500 w-64">
+                        <input type="text" id="filterSearch" oninput="renderCases()" placeholder="بحث باسم المستشفى أو المريض..." class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs outline-none focus:border-red-500 w-64">
                         <select id="filterBlood" onchange="renderCases()" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs outline-none text-red-400 font-bold">
                             <option value="">جميع الفصائل</option>
                             <option value="O-">O-</option><option value="O+">O+</option>
@@ -192,7 +179,7 @@
                         </select>
                     </div>
                     <button onclick="openRequestModal()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> أحتاج متبرعاً (نداء طارئ)
+                        <i class="fa-solid fa-plus"></i> إطلاق حالة طارئة جديدة
                     </button>
                 </div>
                 <div id="casesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -306,7 +293,7 @@
                             <i id="faq-icon-1" class="fa-solid fa-chevron-down text-xs text-red-400"></i>
                         </button>
                         <div id="faq-ans-1" class="hidden p-3 bg-slate-900/50 border-t border-slate-800 text-slate-300">
-                            ج: اضغط على زر "أحتاج متبرعاً" في الرئيسية ثم عبئ بيانات المتبرع والحالة لإطلاق الاستغاثة فوراً للشبكة.
+                            ج: اضغط على زر "أحتاج متبرعاً" في الرئيسية ثم عبئ بيانات المستشفى والحالة لإطلاق الاستغاثة فوراً للشبكة.
                         </div>
                     </div>
 
@@ -352,7 +339,7 @@
         </div>
     </div>
 
-    <!-- نافذة تسجيل الدخول -->
+    <!-- نافذة تسجيل الدخول (بدون قيم افتراضية لكي لا تظهر بيانات شخصية لأحد) -->
     <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -375,7 +362,7 @@
         </div>
     </div>
 
-    <!-- نافذة إطلاق نداء دم طارئ (محدثة حسب طلبك: اسم المتبرع + استعجال أزرق وإزالة المستشفى والمريض ورقم الملف) -->
+    <!-- نافذة إطلاق نداء دم طارئ -->
     <div id="requestModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-md w-full space-y-5 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -384,8 +371,8 @@
             </div>
             <form id="emergencyForm" onsubmit="submitEmergency(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block text-slate-400 mb-1">اسم المتبرع</label>
-                    <input type="text" id="reqDonorName" required placeholder="أدخل اسم المتبرع" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    <label class="block text-slate-400 mb-1">اسم المستشفى</label>
+                    <input type="text" id="reqHospital" required placeholder="اسم المستشفى" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -408,9 +395,19 @@
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1">الاستعجال</label>
-                        <select id="reqUrgency" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-blue-400 font-bold outline-none">
+                        <select id="reqUrgency" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-amber-400 font-bold outline-none">
                             <option>عاجل</option><option>متوسط</option>
                         </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-400 mb-1">اسم المريض (اختياري)</label>
+                        <input type="text" id="reqPatient" placeholder="اسم المريض" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">رقم الملف (اختياري)</label>
+                        <input type="text" id="reqFile" placeholder="رقم الملف" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 outline-none">
                     </div>
                 </div>
                 <div>
@@ -454,9 +451,11 @@
             const res = await fetch('/api/data');
             appData = await res.json();
             
+            // تحديث حالة المستخدم الحالي القادمة من الجلسة الآمنة للسيرفر
             if (appData.current_user) {
                 currentUser = appData.current_user;
                 document.getElementById('authBtnText').innerText = currentUser.name;
+                // تعبئة حقول البروفايل ببيانات المستخدم المسجل دخوله فعلياً
                 document.getElementById('dName').value = currentUser.name || '';
                 document.getElementById('dPhone').value = currentUser.phone || '';
                 document.getElementById('dGov').value = currentUser.governorate || '';
@@ -537,7 +536,6 @@
             document.getElementById('stat-requests').innerText = appData.requests.length;
             renderCases();
             renderDonorsDirectory();
-            renderHomeDonors();
             renderAdminTables();
             checkAdminPermission();
             renderCertificateSection();
@@ -550,31 +548,6 @@
             } else {
                 adminBtn.classList.add('hidden');
             }
-        }
-
-        function renderHomeDonors() {
-            const grid = document.getElementById('homeDonorsGrid');
-            if (!grid) return;
-            if (appData.donors.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 text-xs"><p>لا يوجد متبرعون مسجلون حالياً</p></div>`;
-                return;
-            }
-            grid.innerHTML = appData.donors.slice(0, 3).map(d => `
-                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3 shadow flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-start">
-                            <span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">${appData.roles[d.role] || 'متبرع'}</span>
-                            <span class="text-xs bg-slate-900 px-2.5 py-0.5 rounded-lg text-red-400 font-extrabold border border-slate-800">${d.blood_type}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-100 text-xs"><i class="fa-solid fa-user-check text-emerald-400 ml-1"></i> ${d.name}</h4>
-                        <p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${d.region} - ${d.governorate}</p>
-                    </div>
-                    <div class="pt-2 border-t border-slate-800/80 flex justify-between items-center text-xs">
-                        <span class="text-slate-400 font-mono text-[10px]">${d.phone}</span>
-                        <a href="tel:${d.phone}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1"><i class="fa-solid fa-phone"></i> اتصال</a>
-                    </div>
-                </div>
-            `).join('');
         }
 
         function renderDonorsDirectory() {
@@ -626,7 +599,7 @@
             const blood = bloodSelect ? bloodSelect.value : '';
 
             const filtered = appData.requests.filter(req => {
-                const matchSearch = (req.donor_name && req.donor_name.toLowerCase().includes(search)) || (req.hospital && req.hospital.toLowerCase().includes(search));
+                const matchSearch = req.hospital.toLowerCase().includes(search) || (req.patient_name && req.patient_name.toLowerCase().includes(search));
                 const matchBlood = blood === "" || req.blood_type === blood;
                 return matchSearch && matchBlood;
             });
@@ -640,11 +613,12 @@
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 shadow-xl flex flex-col justify-between">
                     <div class="space-y-2">
                         <div class="flex justify-between items-start">
-                            <span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">${req.urgency}</span>
+                            <span class="bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold">${req.urgency}</span>
                             <span class="text-xs bg-slate-950 px-2.5 py-1 rounded-lg text-red-400 font-extrabold border border-slate-800">${req.blood_type}</span>
                         </div>
-                        <h4 class="font-bold text-slate-100 text-sm"><i class="fa-solid fa-user text-red-500 ml-1"></i> المتبرع: ${req.donor_name || 'غير مدخل'}</h4>
+                        <h4 class="font-bold text-slate-100 text-sm"><i class="fa-solid fa-hospital text-red-500 ml-1"></i> ${req.hospital}</h4>
                         <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot ml-1"></i> ${req.region} - ${req.governorate}</p>
+                        ${req.patient_name ? `<p class="text-xs text-slate-300 bg-slate-950 p-2 rounded-lg border border-slate-800">المريض: ${req.patient_name} (ملف: ${req.file_number})</p>` : ''}
                     </div>
                     <div class="pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
                         <button onclick="showDetails('${req.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-bold"><i class="fa-solid fa-eye ml-1"></i> عرض التفاصيل</button>
@@ -659,11 +633,13 @@
             if (!req) return;
             document.getElementById('detailsModalContent').innerHTML = `
                 <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-                    <div><strong>اسم المتبرع:</strong> ${req.donor_name || 'غير مدخل'}</div>
+                    <div><strong>المستشفى:</strong> ${req.hospital}</div>
                     <div><strong>المنطقة / المحافظة:</strong> ${req.region} - ${req.governorate}</div>
                     <div><strong>فصيلة الدم المطلوبة:</strong> <span class="text-red-400 font-bold">${req.blood_type}</span></div>
-                    <div><strong>درجة الاستعجال:</strong> <span class="text-blue-400 font-bold">${req.urgency}</span></div>
-                    <div><strong>رقم التواصل:</strong> <a href="tel:${req.contact_phone}" class="text-emerald-400 underline font-bold">${req.contact_phone}</a></div>
+                    <div><strong>درجة الاستعجال:</strong> <span class="text-amber-400 font-bold">${req.urgency}</span></div>
+                    <div><strong>اسم المريض:</strong> ${req.patient_name || 'غير مدخل'}</div>
+                    <div><strong>رقم الملف الطبي:</strong> ${req.file_number || 'غير مدخل'}</div>
+                    <div><strong>رقم التواصل المسؤول:</strong> <a href="tel:${req.contact_phone}" class="text-emerald-400 underline font-bold">${req.contact_phone}</a></div>
                     <div><strong>تاريخ النشر:</strong> ${req.date}</div>
                 </div>
             `;
@@ -680,8 +656,8 @@
 
             reqList.innerHTML = appData.requests.map(r => `
                 <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
-                    <div><strong class="text-white">${r.donor_name}</strong> (${r.blood_type})<div class="text-[10px] text-slate-400">${r.region} - ${r.date}</div></div>
-                    <div class="flex items-center gap-2"><span class="text-blue-400 font-bold">${r.urgency}</span><button onclick="adminDeleteRequest('${r.id}')" class="bg-red-600/30 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-[10px] border border-red-500/30">حذف</button></div>
+                    <div><strong class="text-white">${r.hospital}</strong> (${r.blood_type})<div class="text-[10px] text-slate-400">${r.region} - ${r.date}</div></div>
+                    <div class="flex items-center gap-2"><span class="text-red-400 font-bold">${r.urgency}</span><button onclick="adminDeleteRequest('${r.id}')" class="bg-red-600/30 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-[10px] border border-red-500/30">حذف</button></div>
                 </div>
             `).join('') || '<p class="text-slate-500 text-center py-4">لا توجد حالات حالياً</p>';
 
@@ -849,11 +825,13 @@
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    donor_name: document.getElementById('reqDonorName').value,
+                    hospital: document.getElementById('reqHospital').value,
                     region: document.getElementById('reqRegion').value,
                     governorate: document.getElementById('reqGov').value,
                     blood_type: document.getElementById('reqBlood').value,
                     urgency: document.getElementById('reqUrgency').value,
+                    patient_name: document.getElementById('reqPatient').value,
+                    file_number: document.getElementById('reqFile').value,
                     contact_phone: document.getElementById('reqContact').value
                 })
             });
