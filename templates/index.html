@@ -38,10 +38,11 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <nav class="flex items-center bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 text-xs gap-1">
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <nav class="flex flex-wrap items-center bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 text-xs gap-1">
                         <button onclick="switchTab('home')" id="btn-home" class="px-3.5 py-2 rounded-lg font-bold bg-red-600 text-white transition"><i class="fa-solid fa-house ml-1"></i> الرئيسية</button>
                         <button onclick="switchTab('donors')" id="btn-donors" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-users ml-1"></i> المتبرعون</button>
+                        <button onclick="switchTab('emergencies')" id="btn-emergencies" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-triangle-exclamation ml-1"></i> الحالات الحرجة</button>
                         <button onclick="switchTab('profile')" id="btn-profile" class="px-3.5 py-2 rounded-lg font-medium text-slate-300 hover:text-white transition"><i class="fa-solid fa-user-gear ml-1"></i> حسابي</button>
                         <button onclick="switchTab('admin')" id="btn-admin" class="px-3.5 py-2 rounded-lg font-medium text-amber-400 hover:text-white transition hidden"><i class="fa-solid fa-shield-halved ml-1"></i> لوحة الإدارة</button>
                     </nav>
@@ -87,15 +88,6 @@
                             </button>
                         </div>
                     </div>
-                </div>
-
-                <!-- قسم الحالات الحرجة الطارئة النشطة -->
-                <div id="emergencySectionContainer" class="space-y-4 hidden">
-                    <div class="flex items-center gap-2 border-b border-red-900/50 pb-3">
-                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-lg animate-bounce"></i>
-                        <h3 class="text-base font-extrabold text-red-400">الحالات الطارئة الحرجة (تتطلب استجابة فورية)</h3>
-                    </div>
-                    <div id="emergencyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
 
                 <!-- جدول التوافق والشروط -->
@@ -147,10 +139,14 @@
                 </div>
 
                 <!-- الإحصائيات -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
                         <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl"><i class="fa-solid fa-users"></i></div>
                         <div><p class="text-xs text-slate-400">إجمالي المتبرعين النشطين</p><h3 class="text-2xl font-bold text-white" id="stat-donors">0</h3></div>
+                    </div>
+                    <div onclick="switchTab('emergencies')" class="bg-slate-900 border border-red-900/40 hover:border-red-600 p-6 rounded-2xl flex items-center gap-4 shadow-lg cursor-pointer transition">
+                        <div class="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 text-2xl animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div><p class="text-xs text-slate-400">الطلبات والحالات الطارئة</p><h3 class="text-2xl font-bold text-red-400" id="stat-emergencies">0</h3></div>
                     </div>
                     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-center gap-4 shadow-lg">
                         <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl"><i class="fa-solid fa-award"></i></div>
@@ -174,7 +170,6 @@
             <!-- تبويب المتبرعين الكامل مع نموذج تعبئة البيانات -->
             <section id="tab-donors" class="space-y-6 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- نموذج تعبئة بيانات متبرع جديد -->
                     <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
                         <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
                             <i class="fa-solid fa-user-plus text-blue-400"></i> تعبئة بيانات متبرع جديد
@@ -214,7 +209,6 @@
                         </form>
                     </div>
 
-                    <!-- قائمة استعراض وبحث المتبرعين -->
                     <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-3 border-b border-slate-800 pb-3">
                             <h3 class="text-base font-bold text-white flex items-center gap-2">
@@ -224,6 +218,22 @@
                         </div>
                         <div id="donorsDirectoryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-1"></div>
                     </div>
+                </div>
+            </section>
+
+            <!-- تبويب الحالات الحرجة الطارئة -->
+            <section id="tab-emergencies" class="space-y-6 hidden">
+                <div class="bg-slate-900 border-2 border-red-600/60 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-red-900/50 pb-4">
+                        <div>
+                            <h3 class="text-xl font-black text-red-400 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation animate-bounce"></i> الحالات الطارئة الحرجة (استجابة فورية)</h3>
+                            <p class="text-xs text-slate-400">قائمة المستفيدين والمرضى الذين يحتاجون تبرعاً عاجلاً للدم الآن.</p>
+                        </div>
+                        <button onclick="openEmergencyModal()" class="bg-red-600 hover:bg-red-700 text-white font-extrabold px-5 py-3 rounded-xl shadow-lg shadow-red-900/50 transition text-center flex items-center justify-center gap-2 text-xs cursor-pointer animate-pulse border border-red-400">
+                            <i class="fa-solid fa-bullhorn"></i> إضافة حالة طارئة جديدة
+                        </button>
+                    </div>
+                    <div id="emergenciesFullGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
             </section>
 
@@ -354,7 +364,7 @@
         </div>
     </div>
 
-    <!-- نافذة إضافة حالة طارئة حرجة -->
+    <!-- نافذة إضافة حالة طارئة حرجة باللون الأحمر البارز -->
     <div id="emergencyModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-red-600 rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-5 shadow-2xl relative">
             <div class="flex justify-between items-center border-b border-red-900/60 pb-3">
@@ -424,7 +434,7 @@
             <div class="space-y-3 text-xs">
                 <h4 class="font-bold text-red-400 text-sm flex items-center gap-1.5"><i class="fa-solid fa-circle-question"></i> الأسئلة الشائعة</h4>
                 <div class="bg-slate-950 rounded-xl border border-slate-800 p-3 text-slate-300">
-                    ج: يمكنك تعبئة بيانات متبرع جديد من تبويب "المتبرعـون" واستعراض كافة المسجلين بشكل فوري.
+                    ج: يمكنك تعبئة بيانات متبرع جديد أو إضافة حالة طارئة حرجة بكل سهولة من خلال أقسام المنصة.
                 </div>
             </div>
 
@@ -546,7 +556,7 @@
         }
 
         function switchTab(tabId) {
-            ['home', 'donors', 'profile', 'admin'].forEach(t => {
+            ['home', 'donors', 'emergencies', 'profile', 'admin'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 const btn = document.getElementById(`btn-${t}`);
                 if (el) el.classList.add('hidden');
@@ -567,6 +577,7 @@
 
         function updateUI() {
             document.getElementById('stat-donors').innerText = appData.donors.length;
+            document.getElementById('stat-emergencies').innerText = appData.emergencies.length;
             renderDonorsDirectory();
             renderHomeDonors();
             renderEmergencyCases();
@@ -632,16 +643,14 @@
         }
 
         function renderEmergencyCases() {
-            const container = document.getElementById('emergencySectionContainer');
-            const grid = document.getElementById('emergencyGrid');
-            if (!container || !grid) return;
+            const grid = document.getElementById('emergenciesFullGrid');
+            if (!grid) return;
 
             if (!appData.emergencies || appData.emergencies.length === 0) {
-                container.classList.add('hidden');
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500"><i class="fa-solid fa-circle-check text-4xl mb-2 text-emerald-500 opacity-60"></i><p>لا توجد حالات طارئة حرجة حالياً والحمد لله</p></div>`;
                 return;
             }
 
-            container.classList.remove('hidden');
             grid.innerHTML = appData.emergencies.map(em => `
                 <div class="bg-gradient-to-br from-red-950/90 via-slate-900 to-slate-900 border-2 border-red-600 rounded-3xl p-5 shadow-2xl relative flex flex-col justify-between space-y-4">
                     <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-xl font-extrabold text-xs shadow">
